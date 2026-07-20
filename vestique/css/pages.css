@@ -1,0 +1,225 @@
+/* ============================================================
+   VESTIQUE – Page-specific Styles
+   ============================================================ */
+
+/* ============================================================
+   AUTH PAGES
+   ============================================================ */
+.auth-page {
+  min-height: 100vh; display: flex; flex-direction: column;
+  padding: var(--space-xl) var(--space-md);
+}
+.auth-header {
+  text-align: center; margin-bottom: var(--space-2xl);
+}
+.auth-logo {
+  font-family: var(--font-display); font-size: 2.5rem;
+  color: var(--gold); letter-spacing: 4px;
+}
+.auth-logo span { color: var(--rose-gold); }
+.auth-tagline { color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-top: 4px; letter-spacing: 1.5px; }
+.auth-card {
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  flex: 1;
+}
+.auth-title { font-family: var(--font-display); font-size: 1.5rem; color: white; margin-bottom: var(--space-sm); }
+.auth-subtitle { color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-bottom: var(--space-xl); }
+.auth-form .form-label { color: rgba(255,255,255,0.7); }
+.auth-form .form-input {
+  background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15);
+  color: white;
+}
+.auth-form .form-input::placeholder { color: rgba(255,255,255,0.4); }
+.auth-form .form-input:focus { border-color: var(--gold); }
+.auth-form .form-group { margin-bottom: var(--space-md); }
+.auth-divider { color: rgba(255,255,255,0.4); }
+.auth-social-btn {
+  width: 100%; padding: 12px; border-radius: var(--radius-md);
+  border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08);
+  color: white; display: flex; align-items: center; justify-content: center;
+  gap: var(--space-sm); font-weight: 600; font-size: 0.9rem;
+  cursor: pointer; transition: background var(--transition);
+}
+.auth-social-btn:hover { background: rgba(255,255,255,0.15); }
+.auth-switch { text-align: center; margin-top: var(--space-lg); color: rgba(255,255,255,0.5); font-size: 0.875rem; }
+.auth-switch a { color: var(--gold); font-weight: 600; cursor: pointer; }
+.otp-inputs { display: flex; gap: var(--space-sm); justify-content: center; margin: var(--space-xl) 0; }
+.otp-input {
+  width: 52px; height: 56px; border-radius: var(--radius-md);
+  border: 1.5px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08); color: white;
+  font-size: 1.4rem; font-weight: 700; text-align: center; outline: none;
+  transition: border-color var(--transition);
+}
+.otp-input:focus { border-color: var(--gold); }
+
+/* ============================================================
+   HOME PAGE
+   ============================================================ */
+.home-greeting { padding: var(--space-sm) var(--space-md); }
+.greeting-title { font-family: var(--font-display); font-size: 1.3rem; }
+.greeting-sub { font-size: 0.85rem; color: var(--text-muted); }
+
+/* ============================================================
+   DRESS DETAIL PAGE
+   ============================================================ */
+.detail-header {
+  display: flex; align-items: center; gap: var(--space-md);
+  padding: var(--space-md); position: sticky; top: var(--header-h);
+  background: var(--surface); z-index: 10; border-bottom: 1px solid var(--border);
+}
+.detail-back { color: var(--text-muted); display: flex; align-items: center; gap: 4px; font-size: 0.875rem; cursor: pointer; }
+.detail-title { flex: 1; font-family: var(--font-display); font-size: 1rem; }
+.detail-info { padding: var(--space-md); }
+.detail-name { font-family: var(--font-display); font-size: 1.4rem; margin-bottom: 6px; }
+.detail-designer { font-size: 0.85rem; color: var(--text-muted); }
+.detail-price-row { display: flex; align-items: center; gap: var(--space-md); margin: var(--space-md) 0; }
+.detail-section { padding: var(--space-md); border-top: 1px solid var(--border); }
+.detail-section-title { font-weight: 700; margin-bottom: var(--space-sm); font-size: 0.9rem; }
+.detail-desc { font-size: 0.875rem; color: var(--text-muted); line-height: 1.7; }
+.detail-actions {
+  position: sticky; bottom: var(--nav-h); background: var(--surface);
+  border-top: 1px solid var(--border); padding: var(--space-md);
+  display: flex; gap: var(--space-sm); z-index: 10;
+}
+
+/* ============================================================
+   CUSTOMIZE PAGE
+   ============================================================ */
+.customize-header { padding: var(--space-md); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: var(--space-md); }
+.customize-preview-section { background: var(--surface-2); padding: var(--space-md); }
+.customize-controls { padding: var(--space-md); }
+
+/* ============================================================
+   AR STUDIO PAGE
+   ============================================================ */
+.ar-page { padding: var(--space-md); }
+.ar-toolbar {
+  display: flex; gap: var(--space-sm); justify-content: center;
+  margin-bottom: var(--space-md); flex-wrap: wrap;
+}
+.ar-step { background: var(--surface-2); border-radius: var(--radius-lg); padding: var(--space-lg); text-align: center; margin-bottom: var(--space-md); }
+.ar-step-icon { font-size: 3rem; margin-bottom: var(--space-sm); }
+.ar-step-title { font-family: var(--font-display); font-size: 1.1rem; margin-bottom: var(--space-sm); }
+.ar-step-desc { font-size: 0.85rem; color: var(--text-muted); }
+.ar-mode-tabs { display: flex; gap: 0; border: 1.5px solid var(--border); border-radius: var(--radius-md); overflow: hidden; margin-bottom: var(--space-md); }
+.ar-mode-tab {
+  flex: 1; padding: 10px; text-align: center;
+  font-size: 0.85rem; font-weight: 600; cursor: pointer;
+  background: var(--surface-2); color: var(--text-muted);
+  transition: all var(--transition);
+}
+.ar-mode-tab.active { background: var(--gold); color: white; }
+
+/* ============================================================
+   WISHLIST PAGE
+   ============================================================ */
+.wishlist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); padding: var(--space-md); }
+@media (min-width: 480px) { .wishlist-grid { grid-template-columns: repeat(3, 1fr); } }
+
+/* ============================================================
+   CART / CHECKOUT
+   ============================================================ */
+.cart-summary {
+  background: var(--surface-2); border-radius: var(--radius-lg);
+  padding: var(--space-md); margin: var(--space-md);
+}
+.summary-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 0.875rem; }
+.summary-row.total { font-weight: 700; font-size: 1rem; border-top: 1px solid var(--border); margin-top: 6px; padding-top: 12px; }
+.coupon-input-row { display: flex; gap: var(--space-sm); margin: var(--space-md) 0; }
+.coupon-input-row .form-input { flex: 1; }
+.payment-option {
+  display: flex; align-items: center; gap: var(--space-md);
+  padding: var(--space-md); border: 1.5px solid var(--border);
+  border-radius: var(--radius-md); cursor: pointer; margin-bottom: var(--space-sm);
+  transition: border-color var(--transition), background var(--transition);
+}
+.payment-option.selected { border-color: var(--gold); background: var(--gold-light); }
+.payment-radio { width: 20px; height: 20px; border-radius: var(--radius-full); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.payment-option.selected .payment-radio { border-color: var(--gold); }
+.payment-option.selected .payment-radio::after { content: ''; width: 10px; height: 10px; border-radius: var(--radius-full); background: var(--gold); }
+.payment-icon { font-size: 1.5rem; }
+.payment-label { font-weight: 600; font-size: 0.9rem; }
+
+/* ============================================================
+   ORDER SUCCESS / TRACKING
+   ============================================================ */
+.order-success {
+  text-align: center; padding: var(--space-2xl) var(--space-md);
+}
+.order-success-icon { font-size: 5rem; margin-bottom: var(--space-md); }
+.order-success-title { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: var(--space-sm); }
+.order-id { background: var(--gold-light); color: var(--gold-dark); padding: 6px 16px; border-radius: var(--radius-full); font-size: 0.9rem; font-weight: 700; display: inline-block; margin-bottom: var(--space-xl); }
+
+/* ============================================================
+   DESIGNER DASHBOARD
+   ============================================================ */
+.dash-stats { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); padding: var(--space-md); }
+.dash-stat {
+  background: var(--surface); border-radius: var(--radius-lg);
+  padding: var(--space-md); border: 1px solid var(--border);
+  text-align: center;
+}
+.dash-stat-value { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: var(--gold); }
+.dash-stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+.dash-section { padding: var(--space-md); border-top: 1px solid var(--border); }
+.dash-product-row {
+  display: flex; gap: var(--space-md); align-items: center;
+  padding: var(--space-sm) 0; border-bottom: 1px solid var(--border);
+}
+.dash-product-img { width: 56px; height: 70px; border-radius: var(--radius-sm); background: var(--surface-2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+.dash-product-info { flex: 1; }
+.dash-product-name { font-weight: 600; font-size: 0.875rem; }
+.dash-product-meta { font-size: 0.78rem; color: var(--text-muted); }
+.dash-actions { display: flex; gap: var(--space-sm); }
+
+/* ============================================================
+   PROFILE / SETTINGS
+   ============================================================ */
+.profile-hero {
+  background: linear-gradient(135deg, var(--burgundy), #1a0a10);
+  padding: var(--space-xl) var(--space-md) var(--space-2xl);
+  text-align: center;
+}
+.profile-avatar-wrap { position: relative; display: inline-block; margin-bottom: var(--space-md); }
+.profile-avatar { width: 90px; height: 90px; border-radius: var(--radius-full); object-fit: cover; border: 3px solid var(--gold); }
+.profile-avatar-edit {
+  position: absolute; bottom: 0; right: 0;
+  width: 28px; height: 28px; border-radius: var(--radius-full);
+  background: var(--gold); display: flex; align-items: center;
+  justify-content: center; font-size: 0.8rem; cursor: pointer;
+}
+.profile-name { font-family: var(--font-display); font-size: 1.4rem; color: white; }
+.profile-meta { font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-top: 4px; }
+.profile-stats { display: flex; justify-content: center; gap: var(--space-xl); margin-top: var(--space-lg); }
+.profile-stat { text-align: center; color: white; }
+.profile-stat-value { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; }
+.profile-stat-label { font-size: 0.72rem; opacity: 0.7; }
+.settings-list { padding: 0; }
+.settings-item {
+  display: flex; align-items: center; gap: var(--space-md);
+  padding: var(--space-md); border-bottom: 1px solid var(--border);
+  cursor: pointer; transition: background var(--transition);
+}
+.settings-item:hover { background: var(--surface-2); }
+.settings-icon { width: 40px; height: 40px; border-radius: var(--radius-md); background: var(--gold-light); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+.settings-label { flex: 1; font-weight: 600; font-size: 0.9rem; }
+.settings-value { font-size: 0.8rem; color: var(--text-muted); }
+.settings-arrow { color: var(--text-light); }
+.settings-section-title { padding: var(--space-md) var(--space-md) var(--space-xs); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-light); background: var(--surface-2); }
+
+/* ============================================================
+   SEARCH PAGE
+   ============================================================ */
+.search-header { padding: var(--space-md); position: sticky; top: var(--header-h); background: var(--surface); z-index: 10; border-bottom: 1px solid var(--border); }
+.search-bar-full { display: flex; align-items: center; gap: var(--space-sm); background: var(--surface-2); border: 1.5px solid var(--border); border-radius: var(--radius-full); padding: 0 var(--space-md); height: 46px; }
+.search-bar-full:focus-within { border-color: var(--gold); }
+.search-bar-full input { flex: 1; background: none; border: none; outline: none; font-size: 0.95rem; color: var(--text); }
+.search-suggestions { padding: 0 var(--space-md); }
+.search-suggestion { display: flex; align-items: center; gap: var(--space-md); padding: 10px 0; border-bottom: 1px solid var(--border); cursor: pointer; color: var(--text-muted); font-size: 0.875rem; }
+.search-suggestion:hover { color: var(--gold); }
