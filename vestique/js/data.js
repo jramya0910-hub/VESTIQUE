@@ -143,6 +143,60 @@ const DATA = {
       colors: ['#FFFFF0','#FAD5A5','#DC143C'], sizes: ['S','M','L','XL','XXL'],
       images: ['🤵','👑','✨'], badge: 'Top Pick', available: true
     },
+    {
+      id: 'd013', name: 'Lavender Chikankari Sharara',
+      category: 'lehengas', tradition: 'muslim',
+      price: 22000, originalPrice: 26000, designer: 'Zara Noor Collection',
+      designerId: 'des004', description: 'Ethereal lavender sharara set with intricate chikankari hand embroidery. Perfect for Nikah and reception.',
+      fabric: 'Georgette', embroidery: 'Chikankari', rating: 4.7, reviews: 63,
+      colors: ['#E6E6FA','#DDA0DD','#C8A2C8'], sizes: ['XS','S','M','L','XL'],
+      images: ['👗','🌸','💜'], badge: 'New', available: true
+    },
+    {
+      id: 'd014', name: 'Saffron Silk Dharmavaram Saree',
+      category: 'sarees', tradition: 'telugu-brahmin',
+      price: 17500, originalPrice: 21000, designer: 'Pochampally Silks',
+      designerId: 'des002', description: 'Vibrant saffron Dharmavaram silk saree with traditional temple border. A staple for Telugu Brahmin wedding rituals.',
+      fabric: 'Pure Silk', embroidery: 'Temple Border Weaving', rating: 4.8, reviews: 142,
+      colors: ['#FF8C00','#DAA520','#DC143C'], sizes: ['Free Size'],
+      images: ['🥻','🌼','✨'], badge: 'Bestseller', available: true
+    },
+    {
+      id: 'd015', name: 'Teal Meenakari Lehenga',
+      category: 'lehengas', tradition: 'gujarati',
+      price: 38500, originalPrice: 44000, designer: 'Patan Patola House',
+      designerId: 'des007', description: 'Stunning teal lehenga with vibrant Meenakari embroidery and mirror work. A showstopper for Gujarati weddings.',
+      fabric: 'Silk Net', embroidery: 'Meenakari + Mirror Work', rating: 4.9, reviews: 57,
+      colors: ['#008080','#20B2AA','#40E0D0'], sizes: ['S','M','L','XL'],
+      images: ['👗','🪞','💚'], badge: 'Trending', available: true
+    },
+    {
+      id: 'd016', name: 'Pearl White Anarkali Gown',
+      category: 'gowns', tradition: 'christian',
+      price: 28000, originalPrice: 32000, designer: 'Elysian Bridal',
+      designerId: 'des003', description: 'Modern pearl-white anarkali gown with delicate embroidery and a flowing silhouette. Ideal for Christian receptions.',
+      fabric: 'Georgette + Satin', embroidery: 'Pearl & Sequin Work', rating: 4.6, reviews: 48,
+      colors: ['#F8F8FF','#FFFAFA','#FFF0F5'], sizes: ['XS','S','M','L'],
+      images: ['👰','✨','🤍'], badge: null, available: true
+    },
+    {
+      id: 'd017', name: 'Deep Red Kota Doria Saree',
+      category: 'sarees', tradition: 'north-indian',
+      price: 14500, originalPrice: 17000, designer: 'Ritu Kumar Studios',
+      designerId: 'des002', description: 'Lightweight Kota Doria saree in deep red with gold zari motifs. Perfect for summer North Indian weddings.',
+      fabric: 'Kota Doria Cotton-Silk', embroidery: 'Zari Motifs', rating: 4.5, reviews: 89,
+      colors: ['#8B0000','#DC143C','#B22222'], sizes: ['Free Size'],
+      images: ['🥻','🌹','💛'], badge: null, available: true
+    },
+    {
+      id: 'd018', name: 'Couple Matching Outfit Set',
+      category: 'couple', tradition: 'south-indian',
+      price: 42000, originalPrice: 50000, designer: 'Meenakshi Couture',
+      designerId: 'des001', description: 'Coordinated saree and sherwani set in silk with matching border patterns. Perfect for the wedding couple.',
+      fabric: 'Pure Silk', embroidery: 'Zari Weaving', rating: 4.8, reviews: 35,
+      colors: ['#8B0000','#DAA520'], sizes: ['S','M','L','XL'],
+      images: ['💑','🥻','🤵'], badge: 'Limited Edition', available: true
+    },
   ],
 
   // ── Accessories ───────────────────────────────────────────
@@ -205,6 +259,8 @@ const DATA = {
     { id: 'des003', name: 'Elysian Bridal', location: 'Mumbai', speciality: 'Western Gowns', products: 22, rating: 4.7 },
     { id: 'des004', name: 'Zara Noor Collection', location: 'Hyderabad', speciality: 'Anarkali & Sharara', products: 31, rating: 4.6 },
     { id: 'des005', name: 'Kottayam Handlooms', location: 'Kochi', speciality: 'Kerala Traditions', products: 18, rating: 4.9 },
+    { id: 'des006', name: 'Dhaker Kantha', location: 'Kolkata', speciality: 'Bengali Weaves', products: 14, rating: 4.7 },
+    { id: 'des007', name: 'Patan Patola House', location: 'Ahmedabad', speciality: 'Patola & Gujarati', products: 20, rating: 4.8 },
   ],
 
   // ── Customize Options ─────────────────────────────────────

@@ -36,7 +36,7 @@ const DESIGNER = {
             <div class="dash-stat-label">Orders</div>
           </div>
           <div class="dash-stat">
-            <div class="dash-stat-value">${UTILS.formatPrice((STATE.orders.length + 12) * 28500).replace('₹', '₹')}</div>
+            <div class="dash-stat-value">${UTILS.formatPrice((STATE.orders.length + 12) * 28500)}</div>
             <div class="dash-stat-label">Revenue</div>
           </div>
           <div class="dash-stat">

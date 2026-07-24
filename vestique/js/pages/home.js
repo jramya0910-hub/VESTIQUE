@@ -155,11 +155,88 @@ const HOME = {
           </div>
         </div>
 
+        <!-- Recently Viewed -->
+        ${STATE.recentlyViewed && STATE.recentlyViewed.length > 0 ? `
+        <div class="section">
+          <div class="section-header">
+            <h2 class="section-title">👁️ Recently Viewed</h2>
+            <span class="section-link" onclick="STATE.recentlyViewed=[];STORE.save();HOME.render()">Clear</span>
+          </div>
+          <div class="scroll-row">
+            ${STATE.recentlyViewed.map(id => {
+              const d = DATA.dresses.find(dr => dr.id === id);
+              return d ? `<div style="min-width:150px">${UI.dressCard(d)}</div>` : '';
+            }).join('')}
+          </div>
+        </div>` : ''}
+
+        <!-- Wedding Budget Tracker -->
+        <div class="section">
+          <div class="section-header">
+            <h2 class="section-title">💰 Wedding Budget Tracker</h2>
+          </div>
+          <div style="margin:0 var(--space-md)">
+            ${HOME._renderBudgetTracker()}
+          </div>
+        </div>
+
         <div style="height:var(--space-xl)"></div>
       </div>
     `;
 
     this._startCarousel();
+  },
+
+  _renderBudgetTracker() {
+    const cartTotal = getCartTotal();
+    const budget = STATE.currentUser?.weddingBudget || 0;
+    const categories = [
+      { label: 'Bridal Outfit', emoji: '👗', spent: cartTotal, suggested: 50000 },
+      { label: 'Jewelry',       emoji: '💍', spent: 0,          suggested: 20000 },
+      { label: 'Footwear',      emoji: '👡', spent: 0,          suggested: 5000  },
+      { label: 'Accessories',   emoji: '✨', spent: 0,          suggested: 8000  },
+      { label: 'Groom Wear',    emoji: '🤵', spent: 0,          suggested: 35000 },
+    ];
+    const totalSuggested = categories.reduce((s, c) => s + c.suggested, 0);
+    const totalSpent = categories.reduce((s, c) => s + c.spent, 0);
+    const pct = Math.min(100, Math.round((totalSpent / totalSuggested) * 100));
+    return `
+      <div class="card" style="padding:var(--space-md)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-md)">
+          <div>
+            <div style="font-weight:700">Total Budget Used</div>
+            <div style="font-size:0.8rem;color:var(--text-muted)">${UTILS.formatPrice(totalSpent)} of ${UTILS.formatPrice(totalSuggested)} suggested</div>
+          </div>
+          <div style="font-family:var(--font-display);font-size:1.4rem;color:var(--gold)">${pct}%</div>
+        </div>
+        <div style="height:8px;background:var(--surface-2);border-radius:var(--radius-full);overflow:hidden;margin-bottom:var(--space-md)">
+          <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--gold),var(--rose-gold));border-radius:var(--radius-full);transition:width 0.5s ease"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--space-sm)">
+          ${categories.map(c => {
+            const p = Math.min(100, Math.round((c.spent / c.suggested) * 100));
+            return `
+              <div style="display:flex;align-items:center;gap:var(--space-sm)">
+                <span style="font-size:1.2rem;width:24px">${c.emoji}</span>
+                <div style="flex:1">
+                  <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:3px">
+                    <span style="font-weight:600">${c.label}</span>
+                    <span style="color:var(--text-muted)">${UTILS.formatPrice(c.spent)} / ${UTILS.formatPrice(c.suggested)}</span>
+                  </div>
+                  <div style="height:5px;background:var(--surface-2);border-radius:var(--radius-full);overflow:hidden">
+                    <div style="height:100%;width:${p}%;background:${p>80?'var(--error)':p>50?'var(--warning)':'var(--success)'};border-radius:var(--radius-full)"></div>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+        <button class="btn btn-secondary btn-full btn-sm" style="margin-top:var(--space-md)"
+                onclick="ROUTER.navigate('cart')">
+          View Cart & Add Items →
+        </button>
+      </div>
+    `;
   },
 
   _getRecommendations() {

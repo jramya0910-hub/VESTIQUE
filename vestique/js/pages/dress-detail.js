@@ -15,6 +15,9 @@ const DRESS_DETAIL = {
       return;
     }
 
+    // Track this view
+    trackView(dress.id);
+
     this._selectedSize  = dress.sizes[0];
     this._selectedColor = dress.colors[0];
     this._galleryIdx    = 0;
@@ -40,7 +43,9 @@ const DRESS_DETAIL = {
                 <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
               </svg>
             </button>
-            <button class="header-icon-btn">${UTILS.svgIcon('share', 18)}</button>
+            <button class="header-icon-btn" onclick="DRESS_DETAIL.shareDress('${dress.id}')" title="Share">
+              ${UTILS.svgIcon('share', 18)}
+            </button>
           </div>`
         )}
 
@@ -96,7 +101,7 @@ const DRESS_DETAIL = {
         <div class="detail-section">
           <div class="detail-section-title" style="display:flex;align-items:center;gap:var(--space-sm)">
             Size
-            <a style="font-size:0.75rem;color:var(--gold);cursor:pointer">Size Guide</a>
+            <a style="font-size:0.75rem;color:var(--gold);cursor:pointer" onclick="DRESS_DETAIL.showSizeGuide()">Size Guide →</a>
           </div>
           <div class="size-options" id="size-options">
             ${dress.sizes.map((s, i) => `
@@ -147,15 +152,24 @@ const DRESS_DETAIL = {
 
         <!-- Customer Reviews -->
         <div class="detail-section">
-          <div class="detail-section-title">Customer Reviews (${reviews.length})</div>
-          ${reviews.length === 0 ? '<p style="color:var(--text-muted);font-size:0.85rem">Be the first to review this dress!</p>' : ''}
+          <div class="detail-section-title" style="display:flex;align-items:center;justify-content:space-between">
+            <span>Customer Reviews (${reviews.length})</span>
+            <button class="btn btn-secondary btn-sm" onclick="DRESS_DETAIL.showReviewModal('${dress.id}')">
+              ✍️ Write Review
+            </button>
+          </div>
+          ${reviews.length === 0 ? `
+            <div style="padding:var(--space-md) 0;text-align:center">
+              <div style="font-size:2rem;opacity:0.3;margin-bottom:var(--space-sm)">⭐</div>
+              <div style="color:var(--text-muted);font-size:0.85rem">Be the first to review this dress!</div>
+            </div>` : ''}
           <div style="display:flex;flex-direction:column;gap:var(--space-sm);margin-top:var(--space-sm)">
             ${reviews.map(r => `
               <div class="review-card">
                 <div class="review-header">
                   <div class="avatar" style="width:32px;height:32px;font-size:0.85rem">${r.avatar}</div>
                   <div class="review-name">${r.name}</div>
-                  <span style="color:var(--gold);font-size:0.85rem">★★★★★</span>
+                  <span style="color:var(--gold);font-size:0.85rem">${'★'.repeat(r.rating)}${'★'.repeat(5-r.rating).replace(/★/g,'<span style="opacity:0.25">★</span>')}</span>
                   <div class="review-date">${r.date}</div>
                 </div>
                 <div class="review-text">${r.text}</div>
@@ -181,8 +195,8 @@ const DRESS_DETAIL = {
           <button class="btn btn-secondary" style="flex:1" onclick="ROUTER.navigate('customize', {id:'${dress.id}'})">
             ✏️ Customize
           </button>
-          <button class="btn btn-ghost btn-icon" onclick="ROUTER.navigate('ar-studio')">
-            📷 AR
+          <button class="btn btn-ghost btn-icon" onclick="ROUTER.navigate('ar-studio');AR_STUDIO.selectDress('${dress.id}')" title="Try in AR">
+            📷
           </button>
           <button class="btn btn-primary" style="flex:2" onclick="DRESS_DETAIL.addToCart('${dress.id}')">
             🛍️ Add to Cart
@@ -214,5 +228,124 @@ const DRESS_DETAIL = {
 
   addToCart(id) {
     addToCart(id, 1, { size: this._selectedSize, color: this._selectedColor });
+  },
+
+  shareDress(id) {
+    const dress = DATA.dresses.find(d => d.id === id);
+    if (!dress) return;
+    if (navigator.share) {
+      navigator.share({
+        title: dress.name,
+        text: `Check out this beautiful ${dress.name} by ${dress.designer} on Vestique!`,
+        url: window.location.href,
+      }).catch(() => {});
+    } else {
+      // Fallback: copy to clipboard
+      const text = `${dress.name} by ${dress.designer} – ${UTILS.formatPrice(dress.price)} on Vestique`;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => UI.toast('Link copied to clipboard! 📋', 'success'));
+      } else {
+        UI.toast('Share: ' + text);
+      }
+    }
+  },
+
+  showSizeGuide() {
+    UI.showModal(`
+      <div>
+        <div style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:var(--space-md)">Size Guide</div>
+        <div style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-size:0.82rem">
+            <thead>
+              <tr style="background:var(--gold-light)">
+                ${['Size','Bust (in)','Waist (in)','Hip (in)','Height (ft)'].map(h => `<th style="padding:8px 10px;text-align:left;font-weight:700;border-bottom:2px solid var(--gold)">${h}</th>`).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              ${[
+                ['XS', '30–32', '24–26', '33–35', '4\'10"–5\'2"'],
+                ['S',  '32–34', '26–28', '35–37', '5\'1"–5\'4"'],
+                ['M',  '34–36', '28–30', '37–39', '5\'3"–5\'6"'],
+                ['L',  '36–38', '30–32', '39–41', '5\'5"–5\'8"'],
+                ['XL', '38–40', '32–34', '41–43', '5\'7"–5\'10"'],
+                ['XXL','40–42', '34–36', '43–45', '5\'9"–6\'0"'],
+              ].map((row, i) => `
+                <tr style="background:${i%2?'var(--surface-2)':'var(--surface)'}">
+                  ${row.map(c => `<td style="padding:8px 10px;border-bottom:1px solid var(--border)">${c}</td>`).join('')}
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        <div style="margin-top:var(--space-md);font-size:0.78rem;color:var(--text-muted)">
+          💡 Tip: If between sizes, size up for sarees & lehengas. Custom sizing available via the Customize option.
+        </div>
+      </div>
+    `);
+  },
+
+  showReviewModal(dressId) {
+    UI.showModal(`
+      <div>
+        <div style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:var(--space-md)">Write a Review</div>
+        <div class="form-group">
+          <label class="form-label">Your Rating</label>
+          <div id="review-stars" style="display:flex;gap:6px;margin-top:6px">
+            ${[1,2,3,4,5].map(n => `
+              <span style="font-size:1.8rem;cursor:pointer;color:var(--border);transition:color 0.2s"
+                    id="rstar-${n}"
+                    onmouseover="DRESS_DETAIL._hoverStars(${n})"
+                    onmouseout="DRESS_DETAIL._hoverStars(DRESS_DETAIL._reviewRating)"
+                    onclick="DRESS_DETAIL._reviewRating=${n};DRESS_DETAIL._hoverStars(${n})">★</span>
+            `).join('')}
+          </div>
+        </div>
+        <div class="form-group" style="margin-top:var(--space-md)">
+          <label class="form-label">Your Name</label>
+          <input class="form-input" id="review-name" placeholder="E.g., Ananya S." />
+        </div>
+        <div class="form-group" style="margin-top:var(--space-md)">
+          <label class="form-label">Review</label>
+          <textarea class="form-input" id="review-text" rows="3"
+            placeholder="Share your experience with this dress..."></textarea>
+        </div>
+        <button class="btn btn-primary btn-full" style="margin-top:var(--space-lg)"
+                onclick="DRESS_DETAIL.submitReview('${dressId}')">
+          Submit Review
+        </button>
+      </div>
+    `);
+    this._reviewRating = 5;
+    this._hoverStars(5);
+  },
+
+  _reviewRating: 5,
+  _hoverStars(n) {
+    for (let i = 1; i <= 5; i++) {
+      const el = document.getElementById('rstar-' + i);
+      if (el) el.style.color = i <= n ? 'var(--gold)' : 'var(--border)';
+    }
+  },
+
+  submitReview(dressId) {
+    const name = document.getElementById('review-name')?.value.trim();
+    const text = document.getElementById('review-text')?.value.trim();
+    if (!name || !text) { UI.toast('Please fill in all fields', 'error'); return; }
+    if (!this._reviewRating) { UI.toast('Please select a rating', 'error'); return; }
+    if (!DATA.reviews[dressId]) DATA.reviews[dressId] = [];
+    DATA.reviews[dressId].unshift({
+      name,
+      avatar: name.charAt(0).toUpperCase(),
+      rating: this._reviewRating,
+      date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+      text,
+    });
+    // Update review count on dress
+    const dress = DATA.dresses.find(d => d.id === dressId);
+    if (dress) dress.reviews++;
+    UI.hideModal();
+    UI.toast('Review submitted! Thank you 🌟', 'success');
+    // Refresh the reviews section
+    ROUTER.navigate('dress-detail', { id: dressId });
   },
 };

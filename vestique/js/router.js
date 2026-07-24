@@ -70,6 +70,14 @@ const ROUTER = {
     if (this.routes[page]) {
       container.innerHTML = '';
       this.routes[page](params);
+      // Apply entrance animation to the rendered page element
+      if (!isAuthPage) {
+        const pageEl = container.firstElementChild;
+        if (pageEl) {
+          pageEl.classList.add('page-enter');
+          setTimeout(() => pageEl.classList.remove('page-enter'), 300);
+        }
+      }
     }
 
     // Scroll to top

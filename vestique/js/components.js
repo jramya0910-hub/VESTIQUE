@@ -22,9 +22,17 @@ const UI = {
     const cartCount = getCartCount();
     const wishCount = getWishlistCount();
     const notifCount = getUnreadNotifCount();
-    if (cartBadge) { cartBadge.textContent = cartCount; cartBadge.style.display = cartCount ? '' : 'none'; }
+    if (cartBadge) {
+      cartBadge.textContent = cartCount;
+      cartBadge.style.display = cartCount ? '' : 'none';
+      if (cartCount) cartBadge.classList.add('badge-new');
+    }
     if (wishBadge) { wishBadge.textContent = wishCount; wishBadge.style.display = wishCount ? '' : 'none'; }
-    if (notifBadge) { notifBadge.textContent = notifCount; notifBadge.style.display = notifCount ? '' : 'none'; }
+    if (notifBadge) {
+      notifBadge.textContent = notifCount;
+      notifBadge.style.display = notifCount ? '' : 'none';
+      if (notifCount) notifBadge.classList.add('badge-new');
+    }
     // Bottom nav wishlist badge
     const navWishBadge = document.getElementById('nav-wish-badge');
     if (navWishBadge) { navWishBadge.textContent = wishCount; navWishBadge.style.display = wishCount ? '' : 'none'; }
@@ -106,6 +114,7 @@ const UI = {
   // ── Dress Card ─────────────────────────────────────────────
   dressCard(dress, showWishBtn = true) {
     const wished = isWishlisted(dress.id);
+    const inCompare = STATE.compareList.includes(dress.id);
     const discount = dress.originalPrice ? Math.round((1 - dress.price / dress.originalPrice) * 100) : 0;
     return `
       <div class="dress-card" onclick="ROUTER.navigate('dress-detail', {id:'${dress.id}'})">
@@ -121,6 +130,11 @@ const UI = {
           <div class="dress-card-wishlist ${wished ? 'active' : ''}" id="wish-${dress.id}"
                onclick="event.stopPropagation(); toggleWishlist('${dress.id}'); document.querySelectorAll('#wish-${dress.id}').forEach(el => el.classList.toggle('active'))">
             ${UTILS.svgIcon('heart', 16)}
+          </div>
+          <div class="dress-card-compare ${inCompare ? 'active' : ''}" id="cmp-${dress.id}"
+               title="Compare"
+               onclick="event.stopPropagation(); addToCompare('${dress.id}'); UI.updateCompareBar()">
+            ⚖️
           </div>
         </div>` : ''}
         <div class="dress-card-body">
@@ -147,6 +161,29 @@ const UI = {
           onclick="${onChange}('${o.id}')">${o.label}</button>
       `).join('')}
     </div>`;
+  },
+
+  // ── Compare Bar ──────────────────────────────────────────
+  updateCompareBar() {
+    let bar = document.getElementById('compare-bar');
+    const count = STATE.compareList.length;
+    if (count === 0) {
+      if (bar) bar.remove();
+      return;
+    }
+    if (!bar) {
+      bar = document.createElement('div');
+      bar.id = 'compare-bar';
+      bar.style.cssText = 'position:fixed;bottom:calc(var(--nav-h) + 8px);left:50%;transform:translateX(-50%);z-index:150;background:var(--text);color:var(--bg);border-radius:var(--radius-full);padding:10px 20px;display:flex;align-items:center;gap:var(--space-md);box-shadow:var(--shadow-lg);font-size:0.85rem;font-weight:600;animation:fadeUp 0.3s ease;white-space:nowrap';
+      document.body.appendChild(bar);
+    }
+    const dresses = STATE.compareList.map(id => DATA.dresses.find(d => d.id === id)).filter(Boolean);
+    bar.innerHTML = `
+      ${dresses.map(d => d.images[0]).join(' vs ')} &nbsp;
+      <span style="opacity:0.7">${count}/2 selected</span>
+      ${count === 2 ? `<button onclick="showCompareModal()" style="background:var(--gold);color:white;border:none;border-radius:var(--radius-full);padding:6px 14px;font-size:0.8rem;font-weight:700;cursor:pointer">Compare →</button>` : ''}
+      <button onclick="STATE.compareList=[];UI.updateCompareBar()" style="background:transparent;border:none;color:rgba(255,255,255,0.6);cursor:pointer;font-size:1rem;padding:0 4px">✕</button>
+    `;
   },
 
   // ── Back Button Header ────────────────────────────────────

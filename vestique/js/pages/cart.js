@@ -70,7 +70,7 @@ const CART = {
 
           <!-- Checkout Button -->
           <div style="padding:var(--space-md)">
-            <button class="btn btn-primary btn-full btn-lg" onclick="ROUTER.navigate('checkout')">
+            <button class="btn btn-primary btn-full btn-lg gold-pulse" onclick="ROUTER.navigate('checkout')">
               Proceed to Checkout →
             </button>
             <button class="btn btn-ghost btn-full" style="margin-top:var(--space-sm)" onclick="ROUTER.navigate('search')">

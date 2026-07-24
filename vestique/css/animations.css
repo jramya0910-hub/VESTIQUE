@@ -72,3 +72,33 @@
   transition: transform 0.5s, opacity 0.5s;
 }
 .ripple:active::after { transform: scale(2); opacity: 0; transition: none; }
+
+/* Page slide transition (used by router) */
+@keyframes pageSlideIn {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes pageSlideBack {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: none; }
+}
+.page-enter  { animation: pageSlideIn 0.28s ease both; }
+.page-back   { animation: pageSlideBack 0.28s ease both; }
+
+/* Card hover lift */
+.lift { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.lift:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+
+/* Gold pulse animation for CTAs */
+@keyframes goldPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,76,0.4); }
+  50%       { box-shadow: 0 0 0 8px rgba(201,168,76,0); }
+}
+.gold-pulse { animation: goldPulse 2s infinite; }
+
+/* Notification dot bounce */
+@keyframes dotBounce {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.3); }
+}
+.badge-new { animation: dotBounce 1s ease 3; }

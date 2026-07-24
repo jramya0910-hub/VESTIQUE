@@ -196,7 +196,7 @@ const CHECKOUT = {
 
         <div style="display:flex;gap:var(--space-sm);margin-top:var(--space-lg)">
           <button class="btn btn-secondary" style="flex:1" onclick="CHECKOUT._step=2;CHECKOUT.render()">← Back</button>
-          <button class="btn btn-accent btn-lg" style="flex:2" onclick="CHECKOUT.placeOrder()">
+          <button class="btn btn-accent btn-lg gold-pulse" style="flex:2" onclick="CHECKOUT.placeOrder()">
             Place Order 🎉
           </button>
         </div>

@@ -41,6 +41,14 @@
 .dress-card-wishlist.active { background: var(--rose-gold-light); }
 .dress-card-wishlist svg { width: 16px; height: 16px; color: var(--text-muted); }
 .dress-card-wishlist.active svg { color: var(--rose-gold); fill: var(--rose-gold); }
+.dress-card-compare {
+  width: 34px; height: 34px; border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.9); display: flex; align-items: center;
+  justify-content: center; box-shadow: var(--shadow-sm);
+  transition: background var(--transition); cursor: pointer;
+  font-size: 14px;
+}
+.dress-card-compare.active { background: var(--gold-light); }
 .dress-card-badge {
   position: absolute; top: var(--space-sm); left: var(--space-sm);
 }
