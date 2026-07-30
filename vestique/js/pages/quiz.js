@@ -11,7 +11,7 @@ const QUIZ = {
       key: 'tradition',
       q: 'What is your wedding tradition?',
       emoji: '🕌',
-      options: DATA ? [] : [], // filled on render
+      options: [], // filled dynamically at render time
     },
     {
       key: 'style',

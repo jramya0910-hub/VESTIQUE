@@ -77,6 +77,7 @@ const UI = {
       { id: 'ar-studio',icon: 'camera', label: 'AR Studio' },
       { id: 'wishlist', icon: 'heart',  label: 'Wishlist', badge: true },
       { id: 'profile',  icon: 'user',   label: 'Profile' },
+      { id: '_more',    icon: 'tag',    label: 'More' },
     ];
     el.innerHTML = items.map(item => {
       const isMore = item.id === '_more';

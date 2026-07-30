@@ -4,7 +4,11 @@
 
 const SEARCH = {
   _query: '',
-  _activeFilters: { category: null, tradition: null, priceOrder: null, color: null, type: null, designer: null, priceMin: null, priceMax: null },
+  _activeFilters: {
+    category: null, tradition: null, priceOrder: null, sortBy: null,
+    ratingMin: null, color: null, type: null, designer: null,
+    priceMin: null, priceMax: null
+  },
   _showFilters: false,
 
   render(params = {}) {
@@ -45,6 +49,8 @@ const SEARCH = {
           ${this._activeFilters.tradition ? `<span class="chip chip-gold" style="cursor:pointer" onclick="SEARCH.clearFilter('tradition')">${DATA.traditions.find(t=>t.id===this._activeFilters.tradition)?.label} ✕</span>` : ''}
           ${this._activeFilters.designer ? `<span class="chip chip-gold" style="cursor:pointer" onclick="SEARCH.clearFilter('designer')">${DATA.designers.find(d=>d.id===this._activeFilters.designer)?.name || 'Designer'} ✕</span>` : ''}
           ${this._activeFilters.priceOrder ? `<span class="chip chip-gold" style="cursor:pointer" onclick="SEARCH.clearFilter('priceOrder')">Price: ${this._activeFilters.priceOrder==='asc'?'Low→High':'High→Low'} ✕</span>` : ''}
+          ${this._activeFilters.sortBy ? `<span class="chip chip-gold" style="cursor:pointer" onclick="SEARCH.clearFilter('sortBy')">${this._activeFilters.sortBy === 'rating' ? '⭐ Top Rated' : this._activeFilters.sortBy === 'popular' ? '🔥 Popular' : '🆕 Newest'} ✕</span>` : ''}
+          ${this._activeFilters.ratingMin ? `<span class="chip chip-gold" style="cursor:pointer" onclick="SEARCH.clearFilter('ratingMin')">★ ${this._activeFilters.ratingMin}+ ✕</span>` : ''}
           ${this._activeFilters.type ? `<span class="chip chip-gold" style="cursor:pointer" onclick="SEARCH.clearFilter('type')">${this._activeFilters.type} ✕</span>` : ''}
           ${(this._activeFilters.priceMin || this._activeFilters.priceMax) ? `<span class="chip chip-gold" style="cursor:pointer" onclick="SEARCH.clearFilter('priceMin');SEARCH.clearFilter('priceMax')">₹${this._activeFilters.priceMin||0}–₹${this._activeFilters.priceMax||'Any'} ✕</span>` : ''}
           <span class="chip chip-muted" style="cursor:pointer" onclick="SEARCH.clearFilters()">Clear All</span>
@@ -52,13 +58,36 @@ const SEARCH = {
 
         <!-- Filter panel -->
         <div class="filter-panel" id="filter-panel" style="${this._showFilters ? '' : 'display:none'}">
+
+          <!-- Sort By -->
           <div class="filter-section">
-            <div class="filter-section-title">Price Order</div>
+            <div class="filter-section-title">Sort By</div>
             <div class="filter-options">
-              <div class="filter-option ${this._activeFilters.priceOrder==='asc'?'selected':''}" onclick="SEARCH.setFilter('priceOrder','asc')">Low to High</div>
-              <div class="filter-option ${this._activeFilters.priceOrder==='desc'?'selected':''}" onclick="SEARCH.setFilter('priceOrder','desc')">High to Low</div>
+              <div class="filter-option ${this._activeFilters.priceOrder==='asc'?'selected':''}"
+                onclick="SEARCH.setFilter('priceOrder','asc');SEARCH.setFilter('sortBy',null)">Price: Low to High</div>
+              <div class="filter-option ${this._activeFilters.priceOrder==='desc'?'selected':''}"
+                onclick="SEARCH.setFilter('priceOrder','desc');SEARCH.setFilter('sortBy',null)">Price: High to Low</div>
+              <div class="filter-option ${this._activeFilters.sortBy==='rating'?'selected':''}"
+                onclick="SEARCH.setFilter('sortBy','rating');SEARCH.setFilter('priceOrder',null)">⭐ Top Rated</div>
+              <div class="filter-option ${this._activeFilters.sortBy==='popular'?'selected':''}"
+                onclick="SEARCH.setFilter('sortBy','popular');SEARCH.setFilter('priceOrder',null)">🔥 Most Popular</div>
+              <div class="filter-option ${this._activeFilters.sortBy==='newest'?'selected':''}"
+                onclick="SEARCH.setFilter('sortBy','newest');SEARCH.setFilter('priceOrder',null)">🆕 Newest First</div>
             </div>
           </div>
+
+          <!-- Minimum Rating -->
+          <div class="filter-section">
+            <div class="filter-section-title">Minimum Rating</div>
+            <div class="filter-options">
+              ${[4.5, 4.0, 3.5].map(r => `
+                <div class="filter-option ${Number(this._activeFilters.ratingMin) === r ? 'selected' : ''}"
+                  onclick="SEARCH.setFilter('ratingMin', ${r})">★ ${r}+</div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Price Range -->
           <div class="filter-section">
             <div class="filter-section-title">Price Range</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-sm)">
@@ -76,6 +105,8 @@ const SEARCH = {
               </div>
             </div>
           </div>
+
+          <!-- Wedding Tradition -->
           <div class="filter-section">
             <div class="filter-section-title">Wedding Tradition</div>
             <div class="filter-options">
@@ -85,6 +116,8 @@ const SEARCH = {
               `).join('')}
             </div>
           </div>
+
+          <!-- Designer -->
           <div class="filter-section">
             <div class="filter-section-title">Designer</div>
             <div class="filter-options">
@@ -94,6 +127,8 @@ const SEARCH = {
               `).join('')}
             </div>
           </div>
+
+          <!-- Dress Type -->
           <div class="filter-section">
             <div class="filter-section-title">Dress Type</div>
             <div class="filter-options">
@@ -103,6 +138,7 @@ const SEARCH = {
               `).join('')}
             </div>
           </div>
+
           <div style="display:flex;gap:var(--space-sm);margin-top:var(--space-md)">
             <button class="btn btn-primary btn-sm" onclick="SEARCH.applyFilters()">Apply Filters</button>
             <button class="btn btn-secondary btn-sm" onclick="SEARCH.clearFilters()">Clear All</button>
@@ -124,14 +160,20 @@ const SEARCH = {
   },
 
   renderCategory(params) {
-    this._activeFilters = { category: params.id, tradition: null, priceOrder: null, ratingMin: null, color: null, type: null, designer: null, priceMin: null, priceMax: null, sortBy: null };
+    this._activeFilters = {
+      category: params.id, tradition: null, priceOrder: null, sortBy: null,
+      ratingMin: null, color: null, type: null, designer: null, priceMin: null, priceMax: null
+    };
     this._query = '';
     this.render();
     STATE.currentPage = 'category';
   },
 
   renderTradition(params) {
-    this._activeFilters = { category: null, tradition: params.id, priceOrder: null, ratingMin: null, color: null, type: null, designer: null, priceMin: null, priceMax: null, sortBy: null };
+    this._activeFilters = {
+      category: null, tradition: params.id, priceOrder: null, sortBy: null,
+      ratingMin: null, color: null, type: null, designer: null, priceMin: null, priceMax: null
+    };
     this._query = '';
     this.render();
     STATE.currentPage = 'tradition';
@@ -149,14 +191,6 @@ const SEARCH = {
     } else {
       this._activeFilters.category = catId;
     }
-    const resultsEl = document.getElementById('search-results');
-    if (resultsEl) {
-      resultsEl.innerHTML = this._renderResults();
-    }
-    // Update button active states without full re-render
-    document.querySelectorAll('.filter-bar .filter-btn').forEach(btn => {
-      // update done via re-render of results only
-    });
     this.render();
   },
 
@@ -184,7 +218,6 @@ const SEARCH = {
   },
 
   applyFilters() {
-    // read price range inputs if panel was open
     const minEl = document.getElementById('price-min-input');
     const maxEl = document.getElementById('price-max-input');
     if (minEl) this._activeFilters.priceMin = minEl.value ? Number(minEl.value) : null;
@@ -194,7 +227,10 @@ const SEARCH = {
   },
 
   clearFilters() {
-    this._activeFilters = { category: null, tradition: null, priceOrder: null, ratingMin: null, color: null, type: null, designer: null, priceMin: null, priceMax: null, sortBy: null };
+    this._activeFilters = {
+      category: null, tradition: null, priceOrder: null, sortBy: null,
+      ratingMin: null, color: null, type: null, designer: null, priceMin: null, priceMax: null
+    };
     this._showFilters = false;
     this.render();
   },
@@ -237,10 +273,21 @@ const SEARCH = {
     if (this._activeFilters.priceMax) {
       results = results.filter(d => d.price <= Number(this._activeFilters.priceMax));
     }
+    if (this._activeFilters.ratingMin) {
+      results = results.filter(d => d.rating >= Number(this._activeFilters.ratingMin));
+    }
+
+    // Sorting
     if (this._activeFilters.priceOrder === 'asc') {
       results.sort((a, b) => a.price - b.price);
     } else if (this._activeFilters.priceOrder === 'desc') {
       results.sort((a, b) => b.price - a.price);
+    } else if (this._activeFilters.sortBy === 'rating') {
+      results.sort((a, b) => b.rating - a.rating);
+    } else if (this._activeFilters.sortBy === 'popular') {
+      results.sort((a, b) => b.reviews - a.reviews);
+    } else if (this._activeFilters.sortBy === 'newest') {
+      results.sort((a, b) => b.id.localeCompare(a.id));
     }
 
     return results;
@@ -248,10 +295,9 @@ const SEARCH = {
 
   _renderResults() {
     const results = this._getResults();
-    const hasFilters = this._query || Object.values(this._activeFilters).some(Boolean);
+    const hasFilters = this._query || Object.values(this._activeFilters).some(v => v !== null && v !== undefined && v !== '');
 
     if (!hasFilters) {
-      // Show search suggestions and trending
       return `
         <div>
           <div class="section-title" style="margin-bottom:var(--space-md)">Trending Searches</div>
@@ -285,10 +331,13 @@ const SEARCH = {
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-md)">
           <span style="font-size:0.85rem;color:var(--text-muted)">${results.length} result${results.length !== 1 ? 's' : ''}</span>
           <select class="form-select" style="width:auto;padding:6px 28px 6px 10px;font-size:0.8rem"
-            onchange="SEARCH.setFilter('priceOrder',this.value||null);document.getElementById('search-results').innerHTML=SEARCH._renderResults()">
+            onchange="SEARCH._handleSortChange(this.value)">
             <option value="">Sort by</option>
-            <option value="asc" ${this._activeFilters.priceOrder==='asc'?'selected':''}>Price: Low to High</option>
-            <option value="desc" ${this._activeFilters.priceOrder==='desc'?'selected':''}>Price: High to Low</option>
+            <option value="price-asc"  ${this._activeFilters.priceOrder==='asc'?'selected':''}>Price: Low to High</option>
+            <option value="price-desc" ${this._activeFilters.priceOrder==='desc'?'selected':''}>Price: High to Low</option>
+            <option value="rating"     ${this._activeFilters.sortBy==='rating'?'selected':''}>⭐ Top Rated</option>
+            <option value="popular"    ${this._activeFilters.sortBy==='popular'?'selected':''}>🔥 Most Popular</option>
+            <option value="newest"     ${this._activeFilters.sortBy==='newest'?'selected':''}>🆕 Newest</option>
           </select>
         </div>
         <div class="grid-2">
@@ -296,5 +345,15 @@ const SEARCH = {
         </div>
       </div>
     `;
+  },
+
+  _handleSortChange(val) {
+    this._activeFilters.priceOrder = null;
+    this._activeFilters.sortBy = null;
+    if (val === 'price-asc')  this._activeFilters.priceOrder = 'asc';
+    else if (val === 'price-desc') this._activeFilters.priceOrder = 'desc';
+    else if (val) this._activeFilters.sortBy = val;
+    const resultsEl = document.getElementById('search-results');
+    if (resultsEl) resultsEl.innerHTML = this._renderResults();
   },
 };
