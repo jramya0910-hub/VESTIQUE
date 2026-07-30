@@ -29,11 +29,15 @@ const ROUTER = {
     'settings':          () => SETTINGS.render(),
     'category':          (p) => SEARCH.renderCategory(p),
     'tradition':         (p) => SEARCH.renderTradition(p),
-    // New pages
+    // New pages - Round 1
     'quiz':              () => QUIZ.render(),
     'lookbook':          () => LOOKBOOK.render(),
     'appointments':      (p) => APPOINTMENTS.render(p),
     'registry':          () => REGISTRY.render(),
+    // New pages - Round 2
+    'coupon-wallet':     () => COUPON_WALLET.render(),
+    'size-recommender':  () => SIZE_RECOMMENDER.render(),
+    'community-upload':  () => COMMUNITY_UPLOAD.render(),
   },
 
   navigate(page, params = {}, addHistory = true) {

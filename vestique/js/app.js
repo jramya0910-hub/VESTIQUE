@@ -34,6 +34,8 @@ const APP = {
       } else {
         ROUTER.navigate('home');
       }
+      // Init chatbot for authenticated users
+      setTimeout(() => CHATBOT.init(), 800);
     } else {
       ROUTER.navigate('login');
     }

@@ -173,14 +173,30 @@ const ORDERS = {
           </div>
 
           <!-- Actions -->
-          ${order.status !== 'cancelled' && order.status !== 'delivered' ? `
-          <button class="btn btn-secondary btn-full" style="color:var(--error);border-color:var(--error)"
-                  onclick="ORDERS.cancelOrder('${order.id}')">
-            Cancel Order
-          </button>` : ''}
-          <button class="btn btn-ghost btn-full" style="margin-top:var(--space-sm)" onclick="ORDERS.render()">
-            ← Back to Orders
-          </button>
+          <div style="display:flex;flex-direction:column;gap:var(--space-sm)">
+            ${order.status === 'delivered' ? `
+              <button class="btn btn-primary btn-full" onclick="ORDERS.reorder('${order.id}')">
+                🔄 Re-order Same Items
+              </button>
+              <button class="btn btn-secondary btn-full" onclick="ORDERS.showReturnModal('${order.id}')">
+                ↩️ Request Return / Exchange
+              </button>
+            ` : ''}
+            ${order.status !== 'cancelled' && order.status !== 'delivered' ? `
+              <button class="btn btn-secondary btn-full" style="color:var(--error);border-color:var(--error)"
+                      onclick="ORDERS.cancelOrder('${order.id}')">
+                ✕ Cancel Order
+              </button>
+            ` : ''}
+            ${order.status === 'shipped' ? `
+              <button class="btn btn-secondary btn-full" onclick="UI.toast('Live tracking link sent to your phone 📱', 'success')">
+                🚚 Track Live
+              </button>
+            ` : ''}
+            <button class="btn btn-ghost btn-full" onclick="ORDERS.render()">
+              ← Back to Orders
+            </button>
+          </div>
         </div>
 
         <div style="height:var(--space-xl)"></div>
@@ -196,5 +212,94 @@ const ORDERS = {
       UI.toast('Order cancelled successfully', 'success');
       this.render();
     }
+  },
+
+  reorder(orderId) {
+    const order = STATE.orders.find(o => o.id === orderId);
+    if (!order) return;
+    let added = 0;
+    order.items.forEach(item => {
+      addToCart(item.productId, item.qty, item.customizations, item.type || 'dress');
+      added++;
+    });
+    UI.toast(`${added} item${added !== 1 ? 's' : ''} added to cart! 🛍️`, 'success');
+    ROUTER.navigate('cart');
+  },
+
+  showReturnModal(orderId) {
+    const order = STATE.orders.find(o => o.id === orderId);
+    if (!order) return;
+    const reasons = ['Wrong size received', 'Damaged/defective item', 'Not as described', 'Changed my mind', 'Better price elsewhere', 'Other'];
+    UI.showModal(`
+      <div>
+        <div style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:var(--space-md)">↩️ Request Return / Exchange</div>
+        <div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:var(--space-md)">Order: <strong>${order.id}</strong> • ${UTILS.formatDate(order.date)}</div>
+
+        <div class="form-group" style="margin-bottom:var(--space-md)">
+          <label class="form-label">Return Type</label>
+          <div style="display:flex;gap:var(--space-sm)">
+            ${['Refund','Exchange','Store Credit'].map(t=>`
+              <label style="flex:1;text-align:center;cursor:pointer">
+                <input type="radio" name="return-type" value="${t}" style="display:none" ${t==='Refund'?'checked':''} />
+                <div class="return-type-btn" style="padding:10px;border:2px solid var(--border);border-radius:var(--radius-md);font-size:0.82rem;font-weight:600;transition:all 0.2s"
+                     onclick="this.closest('label').querySelector('input').checked=true;document.querySelectorAll('.return-type-btn').forEach(b=>b.style.borderColor='var(--border)');this.style.borderColor='var(--gold)'">
+                  ${t}
+                </div>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:var(--space-md)">
+          <label class="form-label">Reason for Return</label>
+          <select class="form-select" id="return-reason">
+            ${reasons.map(r=>`<option value="${r}">${r}</option>`).join('')}
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom:var(--space-lg)">
+          <label class="form-label">Additional Details (Optional)</label>
+          <textarea class="form-input" id="return-details" rows="2" placeholder="Describe the issue..."></textarea>
+        </div>
+
+        <button class="btn btn-primary btn-full" onclick="ORDERS.submitReturn('${orderId}')">
+          Submit Return Request
+        </button>
+        <div style="font-size:0.75rem;color:var(--text-muted);text-align:center;margin-top:var(--space-md)">
+          Returns are processed within 3–5 business days. Refunds within 7–10 days.
+        </div>
+      </div>
+    `);
+  },
+
+  submitReturn(orderId) {
+    const reason = document.getElementById('return-reason')?.value;
+    const details = document.getElementById('return-details')?.value;
+    const typeInput = document.querySelector('input[name="return-type"]:checked');
+    const returnType = typeInput?.value || 'Refund';
+    if (!STATE.returnRequests) STATE.returnRequests = [];
+    STATE.returnRequests.push({
+      id: 'RET-' + Date.now().toString(36).toUpperCase(),
+      orderId,
+      reason,
+      details,
+      returnType,
+      status: 'pending',
+      date: new Date().toISOString(),
+    });
+    // Add notification
+    STATE.notifications.unshift({
+      id: 'n_ret_' + Date.now(),
+      type: 'order',
+      icon: '↩️',
+      title: 'Return Request Submitted',
+      desc: `Your ${returnType} request for order ${orderId} is being processed`,
+      time: 'Just now',
+      unread: true,
+    });
+    STORE.save();
+    UI.hideModal();
+    UI.toast('Return request submitted! We\'ll process it within 3–5 days 📦', 'success');
+    UI.updateNavBadges();
   },
 };

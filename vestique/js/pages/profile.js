@@ -20,11 +20,12 @@ const PROFILE = {
             <div class="profile-avatar" style="display:flex;align-items:center;justify-content:center;font-size:2.5rem;background:linear-gradient(135deg,var(--gold),var(--rose-gold))">
               ${UTILS.generateAvatar(user?.name || 'U')}
             </div>
-            <div class="profile-avatar-edit" onclick="UI.toast('Photo upload coming soon!')" title="Change Photo">✎</div>
+            <div class="profile-avatar-edit" onclick="PROFILE.showAvatarPicker()" title="Change Avatar Color">✎</div>
           </div>
           <div class="profile-name">${user?.name || 'Guest User'}</div>
           <div class="profile-meta">${user?.email || ''} ${user?.phone ? '• ' + user.phone : ''}</div>
           ${user?.tradition ? `<div style="margin-top:6px"><span class="chip chip-gold" style="font-size:0.75rem">${DATA.traditions.find(t => t.id === user.tradition)?.label || user.tradition}</span></div>` : ''}
+          ${user?.recommendedSize ? `<div style="margin-top:4px"><span class="chip chip-pink" style="font-size:0.75rem">📏 Size ${user.recommendedSize}</span></div>` : ''}
           <div class="profile-stats">
             <div class="profile-stat">
               <div class="profile-stat-value">${STATE.wishlist.length}</div>
@@ -106,6 +107,9 @@ const PROFILE = {
         </div>
         ` : ''}
 
+        <!-- Profile Completion Meter -->
+        ${this._renderCompletionMeter(user)}
+
         <!-- My Tools quick links -->
         <div style="padding:var(--space-md);border-top:1px solid var(--border)">
           <div class="section-title" style="margin-bottom:var(--space-md)">My Tools</div>
@@ -115,6 +119,8 @@ const PROFILE = {
               { icon: '📖', label: 'Lookbooks',      action: "ROUTER.navigate('lookbook')" },
               { icon: '📅', label: 'Appointments',   action: "ROUTER.navigate('appointments')" },
               { icon: '🎁', label: 'Gift Registry',  action: "ROUTER.navigate('registry')" },
+              { icon: '🎟️', label: 'Coupons',        action: "ROUTER.navigate('coupon-wallet')" },
+              { icon: '📏', label: 'Size Finder',    action: "ROUTER.navigate('size-recommender')" },
             ].map(t => `
               <div class="settings-item" onclick="${t.action}" style="border:1px solid var(--border);border-radius:var(--radius-md);margin:0;padding:12px">
                 <div class="settings-icon">${t.icon}</div>
@@ -186,6 +192,77 @@ const PROFILE = {
         <button class="btn btn-primary btn-full" onclick="PROFILE.saveProfile()">Save Changes</button>
       </div>
     `;
+  },
+
+  _renderCompletionMeter(user) {
+    const checks = [
+      { label: 'Name added',        done: !!(user?.name) },
+      { label: 'Email verified',    done: !!(user?.email) },
+      { label: 'Phone added',       done: !!(user?.phone) },
+      { label: 'Tradition selected',done: !!(user?.tradition) },
+      { label: 'Size measured',     done: !!(user?.recommendedSize) },
+      { label: 'Style quiz done',   done: !!(user?.style) },
+    ];
+    const done  = checks.filter(c => c.done).length;
+    const total = checks.length;
+    const pct   = Math.round((done / total) * 100);
+    if (pct === 100) return '';  // don't show if complete
+    return `
+      <div style="padding:var(--space-md);border-top:1px solid var(--border)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-sm)">
+          <div style="font-weight:700;font-size:0.875rem">Profile Completion</div>
+          <span style="font-family:var(--font-display);color:var(--gold);font-size:1.1rem">${pct}%</span>
+        </div>
+        <div style="height:6px;background:var(--surface-2);border-radius:var(--radius-full);overflow:hidden;margin-bottom:var(--space-sm)">
+          <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--gold),var(--rose-gold));border-radius:var(--radius-full);transition:width 0.5s ease"></div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:var(--space-xs)">
+          ${checks.map(c => `
+            <span class="chip" style="font-size:0.7rem;background:${c.done?'var(--success)22':'var(--surface-2)'};color:${c.done?'var(--success)':'var(--text-light)'};border-color:${c.done?'var(--success)':'var(--border)'}">
+              ${c.done?'✓':'+'}  ${c.label}
+            </span>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  },
+
+  showAvatarPicker() {
+    const colors = [
+      { label: 'Gold',      from: '#c9a84c', to: '#b76e79' },
+      { label: 'Royal',     from: '#722f37', to: '#1B4F72' },
+      { label: 'Emerald',   from: '#2D6A4F', to: '#40916C' },
+      { label: 'Lavender',  from: '#7B68EE', to: '#B76E79' },
+      { label: 'Saffron',   from: '#FF8C00', to: '#DC143C' },
+      { label: 'Midnight',  from: '#1a1208', to: '#722f37' },
+    ];
+    UI.showModal(`
+      <div>
+        <div style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:var(--space-md)">Choose Avatar Style</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-sm)">
+          ${colors.map(c => `
+            <div style="cursor:pointer;text-align:center;padding:var(--space-sm)" onclick="PROFILE.setAvatarColor('${c.from}','${c.to}')">
+              <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,${c.from},${c.to});display:flex;align-items:center;justify-content:center;color:white;font-size:1.3rem;font-weight:700;margin:0 auto var(--space-xs)">
+                ${UTILS.generateAvatar(STATE.currentUser?.name || 'U')}
+              </div>
+              <div style="font-size:0.75rem;color:var(--text-muted)">${c.label}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `);
+  },
+
+  setAvatarColor(from, to) {
+    if (STATE.currentUser) {
+      STATE.currentUser.avatarFrom = from;
+      STATE.currentUser.avatarTo   = to;
+      STORE.save();
+    }
+    UI.hideModal();
+    UI.renderHeader();
+    this.render();
+    UI.toast('Avatar updated! ✨', 'success');
   },
 
   toggleEdit() {

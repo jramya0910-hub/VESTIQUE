@@ -198,12 +198,15 @@ const UI = {
   // ── More Menu ─────────────────────────────────────────────
   showMoreMenu() {
     const items = [
-      { icon: '✨', label: 'Find My Style Quiz', desc: 'Discover your perfect look', action: "ROUTER.navigate('quiz')" },
-      { icon: '📖', label: 'My Lookbooks',        desc: 'Create outfit collections',  action: "ROUTER.navigate('lookbook')" },
-      { icon: '📅', label: 'Book Appointment',    desc: 'Consult with a designer',    action: "ROUTER.navigate('appointments')" },
-      { icon: '🎁', label: 'Gift Registry',        desc: 'Share your wish list',       action: "ROUTER.navigate('registry')" },
-      { icon: '🔔', label: 'Price Alerts',         desc: 'Track price drops',          action: "ROUTER.navigate('notifications')" },
-      { icon: '👑', label: 'Community',            desc: 'Inspiration gallery',        action: "ROUTER.navigate('community')" },
+      { icon: '✨', label: 'Find My Style Quiz',  desc: 'Discover your perfect look',      action: "ROUTER.navigate('quiz')" },
+      { icon: '📖', label: 'My Lookbooks',         desc: 'Create outfit collections',       action: "ROUTER.navigate('lookbook')" },
+      { icon: '📅', label: 'Book Appointment',     desc: 'Consult with a designer',         action: "ROUTER.navigate('appointments')" },
+      { icon: '🎁', label: 'Gift Registry',         desc: 'Share your wish list',            action: "ROUTER.navigate('registry')" },
+      { icon: '🎟️', label: 'Coupon Wallet',        desc: 'View & apply coupons',            action: "ROUTER.navigate('coupon-wallet')" },
+      { icon: '📏', label: 'Size Recommender',     desc: 'Find your perfect fit',           action: "ROUTER.navigate('size-recommender')" },
+      { icon: '📸', label: 'Share Your Look',      desc: 'Post your bridal photo',          action: "ROUTER.navigate('community-upload')" },
+      { icon: '👑', label: 'Community Gallery',    desc: 'Inspiration from real brides',    action: "ROUTER.navigate('community')" },
+      { icon: '💬', label: 'Chat with Vee',        desc: 'AI bridal assistant',             action: "CHATBOT.toggle()" },
     ];
     this.showModal(`
       <div>

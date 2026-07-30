@@ -195,19 +195,21 @@ const HOME = {
         <div class="section">
           <div class="section-header">
             <h2 class="section-title">⚡ Quick Tools</h2>
+            <span class="section-link" onclick="UI.showMoreMenu()">See All →</span>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-sm);padding:0 var(--space-md)">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-sm);padding:0 var(--space-md)">
             ${[
-              { icon: '✨', label: 'Find My Style', sub: 'AI Style Quiz', action: "ROUTER.navigate('quiz')", color: 'var(--gold-light)' },
-              { icon: '📖', label: 'Lookbooks', sub: 'My Collections', action: "ROUTER.navigate('lookbook')", color: 'var(--blush)' },
-              { icon: '📅', label: 'Book Designer', sub: 'Consultation', action: "ROUTER.navigate('appointments')", color: 'var(--rose-gold-light)' },
-              { icon: '🎁', label: 'Gift Registry', sub: 'Shareable List', action: "ROUTER.navigate('registry')", color: 'var(--gold-light)' },
+              { icon: '✨', label: 'Style Quiz',    action: "ROUTER.navigate('quiz')",             color: 'var(--gold-light)' },
+              { icon: '📖', label: 'Lookbooks',     action: "ROUTER.navigate('lookbook')",         color: 'var(--blush)' },
+              { icon: '📅', label: 'Appointments',  action: "ROUTER.navigate('appointments')",     color: 'var(--rose-gold-light)' },
+              { icon: '🎁', label: 'Gift Registry', action: "ROUTER.navigate('registry')",         color: 'var(--gold-light)' },
+              { icon: '📏', label: 'Size Finder',   action: "ROUTER.navigate('size-recommender')", color: 'var(--blush)' },
+              { icon: '💬', label: 'Ask Vee',       action: "CHATBOT.toggle()",                    color: 'var(--rose-gold-light)' },
             ].map(f => `
-              <div class="card" style="padding:var(--space-md);cursor:pointer;background:${f.color};border:none"
+              <div class="card" style="padding:var(--space-md) var(--space-sm);cursor:pointer;background:${f.color};border:none;text-align:center"
                    onclick="${f.action}">
-                <div style="font-size:1.8rem;margin-bottom:var(--space-sm)">${f.icon}</div>
-                <div style="font-weight:700;font-size:0.9rem">${f.label}</div>
-                <div style="font-size:0.75rem;color:var(--text-muted)">${f.sub}</div>
+                <div style="font-size:1.6rem;margin-bottom:4px">${f.icon}</div>
+                <div style="font-weight:700;font-size:0.78rem;line-height:1.3">${f.label}</div>
               </div>
             `).join('')}
           </div>
