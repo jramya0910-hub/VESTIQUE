@@ -48,7 +48,7 @@ const PROFILE = {
             { icon: '❤️', label: 'Wishlist',   action: "ROUTER.navigate('wishlist')" },
             { icon: '🛍️', label: 'Cart',       action: "ROUTER.navigate('cart')" },
             { icon: '📍', label: 'Addresses',  action: "PROFILE.showAddresses()" },
-          ].map(a => `
+          ].map((a, i) => `
             <div style="padding:var(--space-md);text-align:center;cursor:pointer;border-right:1px solid var(--border);transition:background 0.2s"
                  onclick="${a.action}">
               <div style="font-size:1.5rem;margin-bottom:4px">${a.icon}</div>
@@ -105,6 +105,25 @@ const PROFILE = {
           `).join('')}
         </div>
         ` : ''}
+
+        <!-- My Tools quick links -->
+        <div style="padding:var(--space-md);border-top:1px solid var(--border)">
+          <div class="section-title" style="margin-bottom:var(--space-md)">My Tools</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-sm)">
+            ${[
+              { icon: '✨', label: 'Style Quiz',     action: "ROUTER.navigate('quiz')" },
+              { icon: '📖', label: 'Lookbooks',      action: "ROUTER.navigate('lookbook')" },
+              { icon: '📅', label: 'Appointments',   action: "ROUTER.navigate('appointments')" },
+              { icon: '🎁', label: 'Gift Registry',  action: "ROUTER.navigate('registry')" },
+            ].map(t => `
+              <div class="settings-item" onclick="${t.action}" style="border:1px solid var(--border);border-radius:var(--radius-md);margin:0;padding:12px">
+                <div class="settings-icon">${t.icon}</div>
+                <div class="settings-label">${t.label}</div>
+                <div class="settings-arrow">${UTILS.svgIcon('forward', 14)}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
 
         <!-- Settings Link -->
         <div style="padding:var(--space-md);border-top:1px solid var(--border)">

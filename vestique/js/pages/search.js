@@ -124,14 +124,14 @@ const SEARCH = {
   },
 
   renderCategory(params) {
-    this._activeFilters = { category: params.id, tradition: null, priceOrder: null, color: null, type: null, designer: null, priceMin: null, priceMax: null };
+    this._activeFilters = { category: params.id, tradition: null, priceOrder: null, ratingMin: null, color: null, type: null, designer: null, priceMin: null, priceMax: null, sortBy: null };
     this._query = '';
     this.render();
     STATE.currentPage = 'category';
   },
 
   renderTradition(params) {
-    this._activeFilters = { category: null, tradition: params.id, priceOrder: null, color: null, type: null, designer: null, priceMin: null, priceMax: null };
+    this._activeFilters = { category: null, tradition: params.id, priceOrder: null, ratingMin: null, color: null, type: null, designer: null, priceMin: null, priceMax: null, sortBy: null };
     this._query = '';
     this.render();
     STATE.currentPage = 'tradition';
@@ -194,7 +194,7 @@ const SEARCH = {
   },
 
   clearFilters() {
-    this._activeFilters = { category: null, tradition: null, priceOrder: null, color: null, type: null, designer: null, priceMin: null, priceMax: null };
+    this._activeFilters = { category: null, tradition: null, priceOrder: null, ratingMin: null, color: null, type: null, designer: null, priceMin: null, priceMax: null, sortBy: null };
     this._showFilters = false;
     this.render();
   },

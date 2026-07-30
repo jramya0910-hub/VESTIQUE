@@ -187,6 +187,41 @@ const DRESS_DETAIL = {
           </div>
         </div>` : ''}
 
+        <!-- Price Alert -->
+        <div class="detail-section">
+          <div class="detail-section-title" style="display:flex;align-items:center;justify-content:space-between">
+            <span>🔔 Price Alert</span>
+            ${`<span style="font-size:0.75rem;color:var(--text-muted)">${hasPriceAlert(dress.id) ? '✓ Alert Active' : 'Get notified on price drop'}</span>`}
+          </div>
+          ${hasPriceAlert(dress.id) ? `
+            <div style="display:flex;align-items:center;gap:var(--space-sm);margin-top:var(--space-sm)">
+              <span style="font-size:0.85rem;color:var(--success)">✓ Alert set for this dress</span>
+              <button class="btn btn-ghost btn-sm" style="color:var(--error)" onclick="removePriceAlert('${dress.id}');ROUTER.navigate('dress-detail',{id:'${dress.id}'})">Remove</button>
+            </div>
+          ` : `
+            <div style="display:flex;gap:var(--space-sm);margin-top:var(--space-sm);align-items:center">
+              <div style="flex:1">
+                <input class="form-input" id="alert-price-input" type="number"
+                       placeholder="Target price (₹)" style="padding:8px 12px;font-size:0.85rem"
+                       value="${Math.floor(dress.price * 0.9)}" />
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="
+                const t = document.getElementById('alert-price-input')?.value;
+                if (!t || isNaN(t)) { UI.toast('Enter a valid price', 'error'); return; }
+                setPriceAlert('${dress.id}', t);
+                ROUTER.navigate('dress-detail',{id:'${dress.id}'});
+              ">Set Alert</button>
+            </div>
+          `}
+        </div>
+
+        <!-- Add to Registry -->
+        <div class="detail-section">
+          <button class="btn btn-secondary btn-full" onclick="REGISTRY.addItem('${dress.id}');UI.toast('Added to Gift Registry! 🎁','success')">
+            🎁 Add to Gift Registry
+          </button>
+        </div>
+
         <!-- Spacer for sticky actions -->
         <div style="height:80px"></div>
 

@@ -180,6 +180,39 @@ const HOME = {
           </div>
         </div>
 
+        <!-- Wedding Countdown -->
+        <div class="section">
+          <div class="section-header">
+            <h2 class="section-title">💍 Wedding Countdown</h2>
+            <span class="section-link" onclick="HOME.showCountdownSetup()">Set Date →</span>
+          </div>
+          <div style="margin:0 var(--space-md)">
+            ${HOME._renderCountdown()}
+          </div>
+        </div>
+
+        <!-- Quick Feature Access -->
+        <div class="section">
+          <div class="section-header">
+            <h2 class="section-title">⚡ Quick Tools</h2>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-sm);padding:0 var(--space-md)">
+            ${[
+              { icon: '✨', label: 'Find My Style', sub: 'AI Style Quiz', action: "ROUTER.navigate('quiz')", color: 'var(--gold-light)' },
+              { icon: '📖', label: 'Lookbooks', sub: 'My Collections', action: "ROUTER.navigate('lookbook')", color: 'var(--blush)' },
+              { icon: '📅', label: 'Book Designer', sub: 'Consultation', action: "ROUTER.navigate('appointments')", color: 'var(--rose-gold-light)' },
+              { icon: '🎁', label: 'Gift Registry', sub: 'Shareable List', action: "ROUTER.navigate('registry')", color: 'var(--gold-light)' },
+            ].map(f => `
+              <div class="card" style="padding:var(--space-md);cursor:pointer;background:${f.color};border:none"
+                   onclick="${f.action}">
+                <div style="font-size:1.8rem;margin-bottom:var(--space-sm)">${f.icon}</div>
+                <div style="font-weight:700;font-size:0.9rem">${f.label}</div>
+                <div style="font-size:0.75rem;color:var(--text-muted)">${f.sub}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
         <div style="height:var(--space-xl)"></div>
       </div>
     `;
@@ -237,6 +270,79 @@ const HOME = {
         </button>
       </div>
     `;
+  },
+
+  _renderCountdown() {
+    const cd = getWeddingCountdown();
+    if (!cd) {
+      return `
+        <div class="card" style="padding:var(--space-md);text-align:center;border:2px dashed var(--border)">
+          <div style="font-size:2rem;margin-bottom:var(--space-sm)">💍</div>
+          <div style="font-weight:600;margin-bottom:4px">Set Your Wedding Date</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:var(--space-md)">Track how many days until your big day!</div>
+          <button class="btn btn-primary btn-sm" onclick="HOME.showCountdownSetup()">Set Wedding Date</button>
+        </div>
+      `;
+    }
+    if (cd.past) {
+      return `
+        <div class="card" style="padding:var(--space-md);text-align:center;background:linear-gradient(135deg,var(--gold-light),var(--blush))">
+          <div style="font-size:2.5rem;margin-bottom:var(--space-sm)">🎊</div>
+          <div style="font-family:var(--font-display);font-size:1.3rem">Congratulations!</div>
+          <div style="font-size:0.85rem;color:var(--text-muted);margin-top:4px">Your wedding day has arrived! Wishing you endless joy 💕</div>
+        </div>
+      `;
+    }
+    const dateStr = new Date(STATE.weddingDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+    return `
+      <div class="card" style="padding:var(--space-md);background:linear-gradient(135deg,#1a1208,#2d200d);color:white;text-align:center">
+        <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);letter-spacing:2px;margin-bottom:var(--space-md)">YOUR BIG DAY</div>
+        <div style="display:flex;justify-content:center;gap:var(--space-lg);margin-bottom:var(--space-md)">
+          ${[
+            { val: cd.days,    label: 'Days' },
+            { val: cd.hours,   label: 'Hours' },
+            { val: cd.minutes, label: 'Mins' },
+          ].map(u => `
+            <div style="text-align:center">
+              <div style="font-family:var(--font-display);font-size:2.5rem;color:var(--gold);line-height:1">${u.val}</div>
+              <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-top:4px;letter-spacing:1px">${u.label}</div>
+            </div>
+          `).join('')}
+        </div>
+        <div style="font-size:0.8rem;color:rgba(255,255,255,0.6)">📅 ${dateStr}</div>
+        <button class="btn btn-ghost btn-sm" style="margin-top:var(--space-sm);color:rgba(255,255,255,0.4);font-size:0.72rem"
+                onclick="HOME.showCountdownSetup()">Change Date</button>
+      </div>
+    `;
+  },
+
+  showCountdownSetup() {
+    const today = new Date();
+    const minDate = new Date(today);
+    minDate.setDate(today.getDate() + 1);
+    UI.showModal(`
+      <div>
+        <div style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:var(--space-md)">💍 Set Wedding Date</div>
+        <div class="form-group">
+          <label class="form-label">Wedding Date</label>
+          <input class="form-input" id="wedding-date-input" type="date"
+                 min="${minDate.toISOString().split('T')[0]}"
+                 value="${STATE.weddingDate || ''}" />
+        </div>
+        <div style="margin-top:var(--space-lg);display:flex;gap:var(--space-sm)">
+          <button class="btn btn-primary" style="flex:2" onclick="
+            const d = document.getElementById('wedding-date-input').value;
+            if (!d) { UI.toast('Please pick a date','error'); return; }
+            STATE.weddingDate = d;
+            STORE.save();
+            UI.hideModal();
+            UI.toast('Wedding date set! 💍', 'success');
+            HOME.render();
+          ">Save Date</button>
+          ${STATE.weddingDate ? `<button class="btn btn-ghost" style="flex:1;color:var(--error)" onclick="STATE.weddingDate=null;STORE.save();UI.hideModal();HOME.render()">Clear</button>` : ''}
+        </div>
+      </div>
+    `);
   },
 
   _getRecommendations() {

@@ -22,6 +22,12 @@ const STATE = {
   cart: [],              // [ { productId, type, qty, customizations } ]
   orders: [],            // [ orderObj ]
   addresses: [],
+  lookbooks: [],         // [ { name, occasion, dressIds, created } ]
+  appointments: [],      // [ { id, designerId, date, time, mode, notes, status } ]
+  priceAlerts: [],       // [ { dressId, targetPrice, active } ]
+  registry: null,        // { name, date, message, dressIds }
+  weddingDate: null,     // ISO string for countdown
+  weddingMilestones: [], // [ { label, done, dueDate } ]
 
   // ── Search & Filter ───────────────────────────────────────
   searchQuery: '',
@@ -61,6 +67,12 @@ const STORE = {
         cart: STATE.cart,
         orders: STATE.orders,
         addresses: STATE.addresses,
+        lookbooks: STATE.lookbooks,
+        appointments: STATE.appointments,
+        priceAlerts: STATE.priceAlerts,
+        registry: STATE.registry,
+        weddingDate: STATE.weddingDate,
+        weddingMilestones: STATE.weddingMilestones,
         darkMode: STATE.darkMode,
         language: STATE.language,
         inspirations: STATE.inspirations,
@@ -200,4 +212,40 @@ const trackView = (dressId) => {
   STATE.recentlyViewed.unshift(dressId);
   if (STATE.recentlyViewed.length > 10) STATE.recentlyViewed.length = 10;
   STORE.save();
+};
+
+// ── Price Alert Helpers ───────────────────────────────────────
+const setPriceAlert = (dressId, targetPrice) => {
+  if (!STATE.priceAlerts) STATE.priceAlerts = [];
+  const existing = STATE.priceAlerts.find(a => a.dressId === dressId);
+  if (existing) {
+    existing.targetPrice = targetPrice;
+    existing.active = true;
+  } else {
+    STATE.priceAlerts.push({ dressId, targetPrice: Number(targetPrice), active: true });
+  }
+  STORE.save();
+  UI.toast(`Price alert set for ₹${Number(targetPrice).toLocaleString('en-IN')} 🔔`, 'success');
+};
+
+const removePriceAlert = (dressId) => {
+  if (!STATE.priceAlerts) return;
+  STATE.priceAlerts = STATE.priceAlerts.filter(a => a.dressId !== dressId);
+  STORE.save();
+  UI.toast('Price alert removed');
+};
+
+const hasPriceAlert = (dressId) => !!(STATE.priceAlerts || []).find(a => a.dressId === dressId && a.active);
+
+// ── Wedding Countdown Helpers ─────────────────────────────────
+const getWeddingCountdown = () => {
+  if (!STATE.weddingDate) return null;
+  const now = new Date();
+  const wedding = new Date(STATE.weddingDate);
+  const diff = wedding - now;
+  if (diff <= 0) return { days: 0, hours: 0, minutes: 0, past: true };
+  const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours   = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  return { days, hours, minutes, past: false };
 };

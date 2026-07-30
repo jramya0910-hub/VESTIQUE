@@ -89,6 +89,29 @@ const WISHLIST = {
     setTimeout(() => this.render(), 400);
   },
 
+  addAllToCart() {
+    const wishlisted = DATA.dresses.filter(d => isWishlisted(d.id));
+    if (!wishlisted.length) { UI.toast('Your wishlist is empty', 'warning'); return; }
+    wishlisted.forEach(d => addToCart(d.id, 1, null, 'dress'));
+    UI.toast(`${wishlisted.length} items added to cart! 🛍️`, 'success');
+  },
+
+  addAllToRegistry() {
+    const wishlisted = DATA.dresses.filter(d => isWishlisted(d.id));
+    if (!wishlisted.length) { UI.toast('Your wishlist is empty', 'warning'); return; }
+    if (!STATE.registry) STATE.registry = { name: '', date: '', message: '', dressIds: [] };
+    if (!STATE.registry.dressIds) STATE.registry.dressIds = [];
+    let added = 0;
+    wishlisted.forEach(d => {
+      if (!STATE.registry.dressIds.includes(d.id)) {
+        STATE.registry.dressIds.push(d.id);
+        added++;
+      }
+    });
+    STORE.save();
+    UI.toast(`${added} items added to Gift Registry! 🎁`, 'success');
+  },
+
   clearAll() {
     STATE.wishlist = [];
     STORE.save();

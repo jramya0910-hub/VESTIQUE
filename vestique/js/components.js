@@ -78,15 +78,23 @@ const UI = {
       { id: 'wishlist', icon: 'heart',  label: 'Wishlist', badge: true },
       { id: 'profile',  icon: 'user',   label: 'Profile' },
     ];
-    el.innerHTML = items.map(item => `
-      <div class="nav-item ${STATE.currentPage === item.id ? 'active' : ''}" onclick="ROUTER.navigate('${item.id}')" id="nav-${item.id}">
-        <div class="nav-icon-wrap" style="position:relative">
-          ${UTILS.svgIcon(item.icon, 22)}
-          ${item.badge ? `<span class="badge" id="nav-wish-badge" style="display:none">0</span>` : ''}
+    el.innerHTML = items.map(item => {
+      const isMore = item.id === '_more';
+      const isActive = !isMore && STATE.currentPage === item.id;
+      const extraPages = ['quiz','lookbook','appointments','registry'];
+      const moreActive = extraPages.includes(STATE.currentPage);
+      return `
+        <div class="nav-item ${isMore ? (moreActive ? 'active' : '') : isActive ? 'active' : ''}"
+             onclick="${isMore ? 'UI.showMoreMenu()' : `ROUTER.navigate('${item.id}')`}"
+             id="nav-${item.id}">
+          <div class="nav-icon-wrap" style="position:relative">
+            ${UTILS.svgIcon(item.icon, 22)}
+            ${item.badge ? `<span class="badge" id="nav-wish-badge" style="display:none">0</span>` : ''}
+          </div>
+          <span>${item.label}</span>
         </div>
-        <span>${item.label}</span>
-      </div>
-    `).join('');
+      `;
+    }).join('');
     this.updateNavBadges();
   },
 
@@ -184,6 +192,38 @@ const UI = {
       ${count === 2 ? `<button onclick="showCompareModal()" style="background:var(--gold);color:white;border:none;border-radius:var(--radius-full);padding:6px 14px;font-size:0.8rem;font-weight:700;cursor:pointer">Compare →</button>` : ''}
       <button onclick="STATE.compareList=[];UI.updateCompareBar()" style="background:transparent;border:none;color:rgba(255,255,255,0.6);cursor:pointer;font-size:1rem;padding:0 4px">✕</button>
     `;
+  },
+
+  // ── More Menu ─────────────────────────────────────────────
+  showMoreMenu() {
+    const items = [
+      { icon: '✨', label: 'Find My Style Quiz', desc: 'Discover your perfect look', action: "ROUTER.navigate('quiz')" },
+      { icon: '📖', label: 'My Lookbooks',        desc: 'Create outfit collections',  action: "ROUTER.navigate('lookbook')" },
+      { icon: '📅', label: 'Book Appointment',    desc: 'Consult with a designer',    action: "ROUTER.navigate('appointments')" },
+      { icon: '🎁', label: 'Gift Registry',        desc: 'Share your wish list',       action: "ROUTER.navigate('registry')" },
+      { icon: '🔔', label: 'Price Alerts',         desc: 'Track price drops',          action: "ROUTER.navigate('notifications')" },
+      { icon: '👑', label: 'Community',            desc: 'Inspiration gallery',        action: "ROUTER.navigate('community')" },
+    ];
+    this.showModal(`
+      <div>
+        <div style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:var(--space-md)">More Features</div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          ${items.map(item => `
+            <div style="display:flex;align-items:center;gap:var(--space-md);padding:var(--space-md);border-radius:var(--radius-md);cursor:pointer;transition:background 0.2s"
+                 onclick="UI.hideModal();${item.action}"
+                 onmouseover="this.style.background='var(--surface-2)'"
+                 onmouseout="this.style.background='transparent'">
+              <div style="font-size:1.8rem;width:40px;text-align:center">${item.icon}</div>
+              <div style="flex:1">
+                <div style="font-weight:700;font-size:0.9rem">${item.label}</div>
+                <div style="font-size:0.75rem;color:var(--text-muted)">${item.desc}</div>
+              </div>
+              <div style="color:var(--text-light)">${UTILS.svgIcon('forward', 16)}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `);
   },
 
   // ── Back Button Header ────────────────────────────────────

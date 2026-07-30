@@ -11,7 +11,7 @@ const ROUTER = {
     'setup-profile':     () => AUTH.renderProfileSetup(),
     // Main
     'home':              () => HOME.render(),
-    'search':            () => SEARCH.render(),
+    'search':            (p) => SEARCH.render(p),
     'ar-studio':         () => AR_STUDIO.render(),
     'wishlist':          () => WISHLIST.render(),
     'profile':           () => PROFILE.render(),
@@ -29,6 +29,11 @@ const ROUTER = {
     'settings':          () => SETTINGS.render(),
     'category':          (p) => SEARCH.renderCategory(p),
     'tradition':         (p) => SEARCH.renderTradition(p),
+    // New pages
+    'quiz':              () => QUIZ.render(),
+    'lookbook':          () => LOOKBOOK.render(),
+    'appointments':      (p) => APPOINTMENTS.render(p),
+    'registry':          () => REGISTRY.render(),
   },
 
   navigate(page, params = {}, addHistory = true) {
