@@ -130,19 +130,16 @@ export async function POST(req: NextRequest) {
         ).join('\n')
       : '\n\n## Available Product Catalog\n\nNo products currently available.'
 
-    const apiKey = process.env.OPENAI_API_KEY
-    if (!apiKey) {
-      return NextResponse.json({ error: 'StyleAI is not configured. Please set OPENAI_API_KEY.' }, { status: 500 })
-    }
+    const apiKey = process.env.BYTEZ_API_KEY ?? '19deb67c0543af12a4f68a0a1b647a2a'
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://api.bytez.com/models/v2/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'meta-llama/Llama-3.2-3B-Instruct',
         messages: [
           { role: 'system', content: SYSTEM_PROMPT + catalogText },
           ...messages,
@@ -153,8 +150,8 @@ export async function POST(req: NextRequest) {
     })
 
     if (!response.ok) {
-      const err = await response.json()
-      return NextResponse.json({ error: err.error?.message ?? 'AI request failed' }, { status: 500 })
+      const err = await response.json().catch(() => ({}))
+      return NextResponse.json({ error: err.error?.message ?? `AI request failed (${response.status})` }, { status: 500 })
     }
 
     const data = await response.json()
