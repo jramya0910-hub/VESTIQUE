@@ -44,20 +44,13 @@ export default function DesignerUploadPage() {
     let image_url: string | null = null
 
     if (imageFile) {
-      const ext = imageFile.name.split('.').pop()
-      const path = `${user!.id}/${Date.now()}.${ext}`
-      const { error: uploadError } = await supabase.storage
-        .from('product-images')
-        .upload(path, imageFile, { cacheControl: '3600', upsert: false })
-
-      if (uploadError) {
-        setError(`Image upload failed: ${uploadError.message}`)
-        setSubmitting(false)
-        return
-      }
-
-      const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(path)
-      image_url = urlData.publicUrl
+      // Convert to base64 data URL — works regardless of storage bucket settings
+      image_url = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => resolve(reader.result as string)
+        reader.onerror = () => reject(new Error('Failed to read file'))
+        reader.readAsDataURL(imageFile)
+      })
     }
 
     const { data: { session } } = await supabase.auth.getSession()
