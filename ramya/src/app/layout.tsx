@@ -6,7 +6,7 @@ import Navbar from '@/components/Navbar'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Vestique — Fashion for Everyone',
+  title: 'Luxy Haven — Fashion for Everyone',
   description: 'Discover curated fashion from independent designers.',
 }
 
@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
           </main>
           <footer className="border-t border-gray-200 mt-16 py-8 text-center text-sm text-gray-500">
-            © {new Date().getFullYear()} Vestique. Crafted with love for fashion.
+            © {new Date().getFullYear()} Luxy Haven. Crafted with love for fashion.
           </footer>
         </AuthProvider>
       </body>
