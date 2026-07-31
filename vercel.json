@@ -1,7 +1,6 @@
 {
-  "framework": "nextjs",
-  "buildCommand": "cd ramya && next build",
-  "devCommand": "cd ramya && next dev",
-  "installCommand": "cd ramya && npm install",
-  "outputDirectory": "ramya/.next"
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "outputDirectory": ".next",
+  "framework": "nextjs"
 }
