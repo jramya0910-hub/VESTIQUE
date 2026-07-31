@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { AuthProvider } from '@/lib/auth-context'
 import Navbar from '@/components/Navbar'
+import StyleAIChat from '@/components/StyleAIChat'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               Crafted with love for luxury fashion
             </p>
           </footer>
+          <StyleAIChat />
         </AuthProvider>
       </body>
     </html>
