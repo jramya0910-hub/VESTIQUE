@@ -230,7 +230,7 @@ export default function ProductDetailPage() {
         {/* Details */}
         <div className="flex flex-col">
           <span className="badge bg-cream text-royal border border-cream text-[10px] tracking-widest mb-3 w-fit capitalize">{product.category}</span>
-          <h1 className="font-serif text-4xl text-royal leading-tight">{product.name}</h1>
+          <h1 className="font-serif text-4xl text-[#059669] leading-tight">{product.name}</h1>
           <p className="font-serif text-3xl text-gold mt-3">₹{product.price.toLocaleString('en-IN')}</p>
 
           {/* Rating */}
@@ -243,7 +243,7 @@ export default function ProductDetailPage() {
           )}
 
           {product.description && (
-            <p className="text-royal/60 mt-5 leading-relaxed text-sm">{product.description}</p>
+            <p className="text-[#059669]/80 mt-5 leading-relaxed text-sm">{product.description}</p>
           )}
 
           <div className="w-12 h-px bg-gold my-6" />
