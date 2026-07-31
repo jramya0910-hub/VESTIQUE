@@ -2,86 +2,114 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap');
 
 @layer base {
   :root {
-    --color-blush:     #FF9D9D;
-    --color-peach:     #FFC5AA;
-    --color-lime:      #4A3060;
-    --color-mint:      #BBF1D2;
-    --color-gold:      #FBC02D;
-    --color-cream:     #FBC02D;
-    --color-royal:     #1A0A2E;
-    --color-deep-navy: #120720;
-    --background: #1A0A2E;
-    --foreground: #FBC02D;
+    --color-gold:        #FBC02D;
+    --color-ivory:       #F5E6D0;
+    --color-maroon:      #3B0A0A;
+    --color-maroon-mid:  #5C1010;
+    --color-maroon-rich: #8B1A1A;
+    --color-blush:       #C0392B;
+    --background:        #1A0000;
+    --foreground:        #F5E6D0;
   }
 
   html {
-    background-color: #1A0A2E;
+    background-color: #1A0000;
   }
 
   body {
     font-family: 'Jost', system-ui, sans-serif;
-    color: #FBC02D;
-    /* Full-page background image with deep purple overlay */
+    color: #F5E6D0;
+    /* Background image — maroon overlay for dark royal aesthetic */
     background-image:
-      linear-gradient(135deg, rgba(26,10,46,0.88) 0%, rgba(18,7,32,0.82) 50%, rgba(26,10,46,0.90) 100%),
+      linear-gradient(
+        160deg,
+        rgba(30,0,0,0.82) 0%,
+        rgba(58,10,10,0.72) 40%,
+        rgba(20,0,0,0.86) 100%
+      ),
       url('/background.jpeg');
     background-size: cover;
-    background-position: center;
+    background-position: center top;
     background-attachment: fixed;
     min-height: 100vh;
   }
 
   h1, h2, h3, h4 {
     font-family: 'Cormorant Garamond', Georgia, serif;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.03em;
+    color: #F5E6D0;
+  }
+
+  /* Gold shimmer on major headings */
+  h1 {
+    color: #FBC02D;
+    text-shadow: 0 0 40px rgba(251,192,45,0.25);
   }
 }
 
 @layer components {
-  /* Primary button — gold text on deep purple */
+
+  /* ── Buttons ── */
   .btn-primary {
-    @apply bg-[#FBC02D] text-[#1A0A2E] px-6 py-2.5 rounded-none font-medium tracking-widest uppercase text-xs
-           hover:bg-[#F9A825] transition-colors disabled:opacity-50 disabled:cursor-not-allowed
-           border border-[#FBC02D] hover:border-[#F9A825];
+    @apply bg-[#FBC02D] text-[#1A0000] px-6 py-2.5 rounded-none font-semibold
+           tracking-widest uppercase text-xs
+           hover:bg-[#F9A825] transition-all duration-200
+           disabled:opacity-40 disabled:cursor-not-allowed
+           border border-[#FBC02D] hover:border-[#F9A825]
+           shadow-[0_0_20px_rgba(251,192,45,0.20)] hover:shadow-[0_0_28px_rgba(251,192,45,0.40)];
   }
 
-  /* Secondary button — gold border, gold text */
   .btn-secondary {
-    @apply border border-[#FBC02D] text-[#FBC02D] px-6 py-2.5 rounded-none font-medium tracking-widest uppercase text-xs
-           hover:bg-[#FBC02D] hover:text-[#1A0A2E] transition-colors;
+    @apply border border-[#FBC02D]/60 text-[#FBC02D] px-6 py-2.5 rounded-none font-medium
+           tracking-widest uppercase text-xs
+           hover:border-[#FBC02D] hover:bg-[#FBC02D]/10 transition-all duration-200;
   }
 
-  /* Card — translucent dark surface so bg image shows through */
+  /* ── Cards — frosted maroon glass ── */
   .card {
-    @apply bg-[#1A0A2E]/75 backdrop-blur-sm rounded-none border border-[#4A3060]
-           overflow-hidden hover:shadow-[0_0_30px_rgba(251,192,45,0.15)]
-           hover:border-[#FBC02D] transition-all duration-300;
+    @apply bg-[#2A0505]/80 backdrop-blur-md rounded-none
+           border border-[#5C1010]
+           overflow-hidden
+           hover:border-[#FBC02D]/60
+           hover:shadow-[0_8px_40px_rgba(139,26,26,0.50),0_0_0_1px_rgba(251,192,45,0.08)]
+           transition-all duration-300;
   }
 
-  /* Input — semi-transparent dark bg */
+  /* ── Inputs ── */
   .input {
-    @apply w-full border border-[#4A3060] bg-[#1A0A2E]/70 backdrop-blur-sm rounded-none px-4 py-2.5
-           focus:outline-none focus:ring-1 focus:ring-[#FBC02D] focus:border-[#FBC02D]
-           transition text-[#FBC02D] placeholder:text-[#FBC02D]/40;
+    @apply w-full border border-[#5C1010] bg-[#1A0000]/70 backdrop-blur-sm rounded-none
+           px-4 py-2.5
+           focus:outline-none focus:ring-1 focus:ring-[#FBC02D]/60 focus:border-[#FBC02D]/60
+           transition text-[#F5E6D0] placeholder:text-[#F5E6D0]/30;
   }
 
+  /* ── Form labels ── */
   .label {
-    @apply block text-xs font-medium tracking-widest uppercase text-[#FBC02D]/70 mb-1;
+    @apply block text-[10px] font-medium tracking-[0.2em] uppercase text-[#FBC02D]/60 mb-1;
   }
 
+  /* ── Badges ── */
   .badge {
-    @apply inline-flex items-center px-3 py-0.5 rounded-none text-xs font-medium tracking-widest uppercase;
+    @apply inline-flex items-center px-3 py-0.5 rounded-none
+           text-[10px] font-medium tracking-[0.15em] uppercase;
   }
 
+  /* ── Gold divider ── */
   .divider-gold {
-    @apply border-t border-gold/30 my-6;
+    @apply border-t border-[#FBC02D]/20 my-6;
   }
 
+  /* ── Section headings ── */
   .heading-royal {
-    @apply font-serif text-3xl md:text-4xl text-royal tracking-wide;
+    @apply font-serif text-3xl md:text-4xl text-[#FBC02D] tracking-wide;
+  }
+
+  /* ── Thin gold ornamental line ── */
+  .gold-line {
+    @apply block w-12 h-px bg-gradient-to-r from-transparent via-[#FBC02D] to-transparent mx-auto my-4;
   }
 }

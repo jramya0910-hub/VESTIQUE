@@ -11,16 +11,20 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        blush:      "#FF9D9D",   // coral rose  — accents, hearts, errors
-        peach:      "#FFC5AA",   // soft peach  — hover states, warm accents
-        lime:       "#4A3060",   // mid purple  — borders, dividers
-        mint:       "#BBF1D2",   // mint green  — success, confirmed, delivered
-        gold:       "#FBC02D",   // golden text — prices, icons, dividers
-        cream:      "#FBC02D",   // golden text — labels, text (alias)
-        royal:      "#1A0A2E",   // deep purple — primary bg, buttons
-        "deep-navy":"#120720",   // darker purple — button hover
-        sage:       "#BBF1D2",   // alias → mint (orders delivered)
-        steel:      "#FFC5AA",   // alias → peach (orders shipped)
+        gold:       "#FBC02D",   // warm gold    — prices, icons, dividers, hover
+        ivory:      "#F5E6D0",   // champagne    — headings, body text
+        maroon:     "#3B0A0A",   // deep maroon  — dark surfaces, cards
+        "maroon-mid":"#5C1010",  // mid maroon   — borders, dividers
+        "maroon-rich":"#8B1A1A", // rich maroon  — hover borders, accents
+        blush:      "#C0392B",   // crimson      — hearts, error accents
+        royal:      "#3B0A0A",   // alias maroon — used in existing classes
+        "deep-navy":"#280606",   // darkest       — button hover, deepest bg
+        cream:      "#F5E6D0",   // alias ivory  — used in existing classes
+        sage:       "#A8D8A8",   // soft green   — delivered badge
+        steel:      "#D4A574",   // warm tan     — shipped badge
+        mint:       "#A8D8A8",   // alias sage
+        peach:      "#D4A574",   // alias steel
+        lime:       "#5C1010",   // alias maroon-mid — borders
       },
       fontFamily: {
         serif: ["Georgia", "Cambria", "Times New Roman", "serif"],
