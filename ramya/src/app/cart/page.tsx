@@ -23,10 +23,7 @@ export default function CartPage() {
     if (authLoading) return
     if (!user) { router.push('/login'); return }
     async function load() {
-      const { data } = await supabase
-        .from('cart_items')
-        .select('*, products(*)')
-        .eq('user_id', user!.id)
+      const { data } = await supabase.from('cart_items').select('*, products(*)').eq('user_id', user!.id)
       setItems((data as CartItem[]) ?? [])
       setLoading(false)
     }
@@ -38,11 +35,7 @@ export default function CartPage() {
     if (!item) return
     const newQty = item.quantity + delta
     if (newQty < 1) { await removeItem(productId); return }
-    await supabase
-      .from('cart_items')
-      .update({ quantity: newQty })
-      .eq('user_id', user!.id)
-      .eq('product_id', productId)
+    await supabase.from('cart_items').update({ quantity: newQty }).eq('user_id', user!.id).eq('product_id', productId)
     setItems(prev => prev.map(i => i.product_id === productId ? { ...i, quantity: newQty } : i))
   }
 
@@ -62,12 +55,7 @@ export default function CartPage() {
       body: JSON.stringify({ code: couponCode, cart_total: subtotal }),
     })
     const data = await res.json()
-    if (res.ok) {
-      setAppliedCoupon(data)
-    } else {
-      setCouponError(data.error ?? 'Invalid coupon')
-      setAppliedCoupon(null)
-    }
+    if (res.ok) { setAppliedCoupon(data) } else { setCouponError(data.error ?? 'Invalid coupon'); setAppliedCoupon(null) }
     setCouponLoading(false)
   }
 
@@ -75,33 +63,11 @@ export default function CartPage() {
     setPlacing(true)
     const subtotal = items.reduce((sum, item) => sum + (item.products?.price ?? 0) * item.quantity, 0)
     const total = subtotal - (appliedCoupon?.discount_amount ?? 0)
-
-    const { data: order, error: orderError } = await supabase
-      .from('orders')
-      .insert({ user_id: user!.id, total, status: 'pending' })
-      .select()
-      .single()
-
-    if (orderError || !order) {
-      alert('Failed to place order: ' + orderError?.message)
-      setPlacing(false)
-      return
-    }
-
-    const orderItems = items.map(item => ({
-      order_id: order.id,
-      product_id: item.product_id,
-      quantity: item.quantity,
-      price: item.products?.price ?? 0,
-    }))
-
+    const { data: order, error: orderError } = await supabase.from('orders').insert({ user_id: user!.id, total, status: 'pending' }).select().single()
+    if (orderError || !order) { alert('Failed to place order: ' + orderError?.message); setPlacing(false); return }
+    const orderItems = items.map(item => ({ order_id: order.id, product_id: item.product_id, quantity: item.quantity, price: item.products?.price ?? 0 }))
     const { error: itemsError } = await supabase.from('order_items').insert(orderItems)
-    if (itemsError) {
-      alert('Failed to save order items: ' + itemsError.message)
-      setPlacing(false)
-      return
-    }
-
+    if (itemsError) { alert('Failed to save order items: ' + itemsError.message); setPlacing(false); return }
     await supabase.from('cart_items').delete().eq('user_id', user!.id)
     setItems([])
     setOrderSuccess(order.id)
@@ -113,17 +79,20 @@ export default function CartPage() {
   const total = Math.max(0, subtotal - discount)
 
   if (authLoading || loading) {
-    return <div className="flex items-center justify-center py-20 text-gray-400">Loading…</div>
+    return <div className="flex items-center justify-center py-20 text-royal/30 text-xs tracking-widest uppercase">Loading…</div>
   }
 
   if (orderSuccess) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="text-center bg-green-50 border border-green-200 rounded-2xl p-12 max-w-md">
-          <div className="text-5xl mb-4">🎉</div>
-          <h2 className="text-2xl font-bold text-green-800 mb-2">Order Placed!</h2>
-          <p className="text-green-600 mb-2">Your order is confirmed.</p>
-          <p className="text-sm text-gray-500 mb-6">Order ID: <code className="bg-white px-2 py-0.5 rounded text-xs">{orderSuccess}</code></p>
+        <div className="text-center bg-sage/10 border border-sage/40 p-12 max-w-md">
+          <div className="w-16 h-16 rounded-full bg-sage/20 flex items-center justify-center mx-auto mb-6">
+            <ShoppingBag size={28} className="text-sage" />
+          </div>
+          <h2 className="font-serif text-3xl text-royal mb-2">Order Confirmed</h2>
+          <div className="w-10 h-px bg-gold mx-auto mb-4" />
+          <p className="text-royal/60 text-sm mb-2">Your order has been placed successfully.</p>
+          <p className="text-xs text-royal/40 mb-6 font-mono">Order ID: {orderSuccess.slice(0, 8)}…</p>
           <div className="flex gap-3 justify-center">
             <Link href="/orders" className="btn-primary">View Orders</Link>
             <Link href="/" className="btn-secondary">Continue Shopping</Link>
@@ -136,132 +105,120 @@ export default function CartPage() {
   return (
     <div>
       <div className="flex items-center gap-3 mb-8">
-        <ShoppingBag className="text-violet-600" size={24} />
-        <h1 className="text-2xl font-bold text-gray-900">My Cart</h1>
-        <span className="badge bg-violet-100 text-violet-700">{items.length} items</span>
+        <ShoppingBag className="text-gold" size={22} />
+        <h1 className="font-serif text-3xl text-royal tracking-wide">My Cart</h1>
+        <span className="badge bg-cream text-royal border border-cream text-[10px]">{items.length} items</span>
       </div>
 
       {items.length === 0 ? (
-        <div className="text-center py-20">
-          <ShoppingBag size={48} className="mx-auto text-gray-200 mb-4" />
-          <p className="text-gray-500 text-lg">Your cart is empty</p>
-          <Link href="/" className="btn-primary mt-6 inline-block">Browse Catalog</Link>
+        <div className="text-center py-24">
+          <ShoppingBag size={40} className="mx-auto text-cream mb-4" />
+          <p className="font-serif text-2xl text-royal/40 mb-2">Your cart is empty</p>
+          <p className="text-xs tracking-widest uppercase text-royal/30 mb-6">Discover our curated collection</p>
+          <Link href="/" className="btn-primary">Browse Catalogue</Link>
         </div>
       ) : (
         <div className="grid lg:grid-cols-3 gap-8">
+          {/* Items */}
           <div className="lg:col-span-2 space-y-4">
             {items.map(item => {
               const p = item.products!
               return (
-                <div key={item.product_id} className="flex gap-4 bg-white border border-gray-200 rounded-xl p-4">
+                <div key={item.product_id} className="flex gap-4 bg-white border border-cream p-4">
                   <Link href={`/product/${p.id}`}>
-                    <div className="relative w-24 h-32 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
-                      {p.image_url ? (
+                    <div className="relative w-24 h-32 bg-cream/30 flex-shrink-0 overflow-hidden">
+                      {p.image_url
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={p.image_url} alt={p.name} className="object-cover w-full h-full" />
-                      ) : (
-                        <div className="flex items-center justify-center h-full text-gray-300 text-xs">No img</div>
-                      )}
+                        ? <img src={p.image_url} alt={p.name} className="object-cover w-full h-full" />
+                        : <div className="flex items-center justify-center h-full text-royal/20 text-xs">No img</div>}
                     </div>
                   </Link>
                   <div className="flex-1 min-w-0">
                     <Link href={`/product/${p.id}`}>
-                      <p className="font-semibold text-gray-900 hover:text-violet-600">{p.name}</p>
+                      <p className="font-medium text-royal hover:text-gold transition-colors tracking-wide">{p.name}</p>
                     </Link>
-                    <p className="text-sm text-gray-500 capitalize">{p.category}</p>
-                    <p className="font-bold text-violet-700 mt-1">₹{p.price.toLocaleString('en-IN')}</p>
+                    <p className="text-[10px] tracking-widest uppercase text-royal/40 mt-0.5">{p.category}</p>
+                    <p className="font-serif text-gold mt-1">₹{p.price.toLocaleString('en-IN')}</p>
                     <div className="flex items-center gap-2 mt-3">
-                      <button onClick={() => updateQty(p.id, -1)} className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50">
-                        <Minus size={14} />
+                      <button onClick={() => updateQty(p.id, -1)} className="p-1.5 border border-cream hover:border-gold text-royal/60 transition-colors">
+                        <Minus size={12} />
                       </button>
-                      <span className="w-8 text-center font-medium">{item.quantity}</span>
-                      <button onClick={() => updateQty(p.id, 1)} className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50">
-                        <Plus size={14} />
+                      <span className="w-8 text-center text-sm font-medium text-royal">{item.quantity}</span>
+                      <button onClick={() => updateQty(p.id, 1)} className="p-1.5 border border-cream hover:border-gold text-royal/60 transition-colors">
+                        <Plus size={12} />
                       </button>
-                      <button onClick={() => removeItem(p.id)} className="ml-2 p-1.5 text-gray-400 hover:text-red-500">
-                        <Trash2 size={14} />
+                      <button onClick={() => removeItem(p.id)} className="ml-2 p-1.5 text-royal/30 hover:text-blush transition-colors">
+                        <Trash2 size={13} />
                       </button>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-gray-900">₹{(p.price * item.quantity).toLocaleString('en-IN')}</p>
+                    <p className="font-serif text-royal">₹{(p.price * item.quantity).toLocaleString('en-IN')}</p>
                   </div>
                 </div>
               )
             })}
           </div>
 
+          {/* Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-gray-50 rounded-2xl p-6 sticky top-24">
-              <h3 className="font-bold text-lg text-gray-900 mb-4">Order Summary</h3>
-              <div className="space-y-2 text-sm">
+            <div className="bg-white border border-cream p-6 sticky top-24">
+              <h3 className="font-serif text-xl text-royal mb-1">Order Summary</h3>
+              <div className="w-8 h-px bg-gold mb-4" />
+
+              <div className="space-y-2">
                 {items.map(item => (
-                  <div key={item.product_id} className="flex justify-between text-gray-600">
+                  <div key={item.product_id} className="flex justify-between text-xs text-royal/60">
                     <span className="truncate max-w-[60%]">{item.products?.name} × {item.quantity}</span>
                     <span>₹{((item.products?.price ?? 0) * item.quantity).toLocaleString('en-IN')}</span>
                   </div>
                 ))}
               </div>
 
-              {/* Coupon input */}
-              <div className="border-t border-gray-200 mt-4 pt-4">
-                <label className="text-xs font-medium text-gray-500 mb-2 block">Coupon Code</label>
+              {/* Coupon */}
+              <div className="border-t border-cream mt-4 pt-4">
+                <label className="label mb-2 block">Coupon Code</label>
                 {appliedCoupon ? (
-                  <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+                  <div className="flex items-center justify-between bg-sage/10 border border-sage/30 px-3 py-2">
                     <div className="flex items-center gap-2">
-                      <Tag size={14} className="text-green-600" />
-                      <span className="text-sm font-semibold text-green-700">{appliedCoupon.code}</span>
-                      <span className="text-xs text-green-600">
-                        −₹{appliedCoupon.discount_amount.toLocaleString('en-IN')}
-                      </span>
+                      <Tag size={13} className="text-sage" />
+                      <span className="text-xs font-medium text-royal">{appliedCoupon.code}</span>
+                      <span className="text-xs text-sage">−₹{appliedCoupon.discount_amount.toLocaleString('en-IN')}</span>
                     </div>
-                    <button onClick={() => setAppliedCoupon(null)} className="text-gray-400 hover:text-red-500">
-                      <X size={14} />
-                    </button>
+                    <button onClick={() => setAppliedCoupon(null)} className="text-royal/30 hover:text-blush"><X size={13} /></button>
                   </div>
                 ) : (
                   <div className="flex gap-2">
-                    <input
-                      value={couponCode}
-                      onChange={e => { setCouponCode(e.target.value); setCouponError('') }}
-                      onKeyDown={e => e.key === 'Enter' && applyCoupon()}
-                      placeholder="Enter code"
-                      className="input text-sm flex-1"
-                    />
-                    <button
-                      onClick={applyCoupon}
-                      disabled={couponLoading || !couponCode.trim()}
-                      className="btn-secondary text-sm px-4"
-                    >
+                    <input value={couponCode} onChange={e => { setCouponCode(e.target.value); setCouponError('') }}
+                      onKeyDown={e => e.key === 'Enter' && applyCoupon()} placeholder="Enter code" className="input text-xs flex-1" />
+                    <button onClick={applyCoupon} disabled={couponLoading || !couponCode.trim()} className="btn-secondary text-xs px-4">
                       {couponLoading ? '…' : 'Apply'}
                     </button>
                   </div>
                 )}
-                {couponError && <p className="text-xs text-red-500 mt-1">{couponError}</p>}
-                <p className="text-xs text-gray-400 mt-1">Try: WELCOME10, FLAT200, FASHION20</p>
+                {couponError && <p className="text-[10px] text-blush mt-1">{couponError}</p>}
+                <p className="text-[10px] text-royal/30 mt-1 tracking-wide">Try: WELCOME10, FLAT200, FASHION20</p>
               </div>
 
-              <div className="border-t border-gray-200 mt-4 pt-4 space-y-2 text-sm">
-                <div className="flex justify-between text-gray-600">
-                  <span>Subtotal</span>
-                  <span>₹{subtotal.toLocaleString('en-IN')}</span>
+              <div className="border-t border-cream mt-4 pt-4 space-y-2">
+                <div className="flex justify-between text-xs text-royal/60">
+                  <span>Subtotal</span><span>₹{subtotal.toLocaleString('en-IN')}</span>
                 </div>
                 {discount > 0 && (
-                  <div className="flex justify-between text-green-600 font-medium">
-                    <span>Coupon Discount</span>
-                    <span>−₹{discount.toLocaleString('en-IN')}</span>
+                  <div className="flex justify-between text-xs text-sage font-medium">
+                    <span>Coupon Discount</span><span>−₹{discount.toLocaleString('en-IN')}</span>
                   </div>
                 )}
-                <div className="flex justify-between font-bold text-lg pt-2 border-t border-gray-200">
-                  <span>Total</span>
-                  <span className="text-violet-700">₹{total.toLocaleString('en-IN')}</span>
+                <div className="flex justify-between font-serif text-xl pt-2 border-t border-cream">
+                  <span className="text-royal">Total</span>
+                  <span className="text-gold">₹{total.toLocaleString('en-IN')}</span>
                 </div>
               </div>
 
-              <button onClick={placeOrder} disabled={placing} className="btn-primary w-full mt-6 text-base py-3">
+              <button onClick={placeOrder} disabled={placing} className="btn-primary w-full mt-6 py-3">
                 {placing ? 'Placing Order…' : 'Place Order'}
               </button>
-              <p className="text-xs text-center text-gray-400 mt-3">No payment required for this demo</p>
+              <p className="text-[10px] text-center text-royal/30 mt-3 tracking-wide">No payment required for this demo</p>
             </div>
           </div>
         </div>
