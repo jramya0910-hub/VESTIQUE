@@ -11,7 +11,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#1A0A2E] border-b border-[#4A3060]">
+    <nav className="sticky top-0 z-50 bg-[#1A0A2E]/80 backdrop-blur-md border-b border-[#4A3060]">
       {/* Top luxury bar */}
       <div className="bg-royal text-cream text-center text-[10px] tracking-[0.25em] uppercase py-1.5 font-light">
         Free shipping on orders above ₹2,999

@@ -25,7 +25,14 @@
   body {
     font-family: 'Jost', system-ui, sans-serif;
     color: #FBC02D;
-    background-color: #1A0A2E;
+    /* Full-page background image with deep purple overlay */
+    background-image:
+      linear-gradient(135deg, rgba(26,10,46,0.88) 0%, rgba(18,7,32,0.82) 50%, rgba(26,10,46,0.90) 100%),
+      url('/background.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
   }
 
   h1, h2, h3, h4 {
@@ -48,15 +55,16 @@
            hover:bg-[#FBC02D] hover:text-[#1A0A2E] transition-colors;
   }
 
-  /* Card — dark purple surface, mid-purple border */
+  /* Card — translucent dark surface so bg image shows through */
   .card {
-    @apply bg-[#241040] rounded-none border border-[#4A3060] overflow-hidden hover:shadow-lg
+    @apply bg-[#1A0A2E]/75 backdrop-blur-sm rounded-none border border-[#4A3060]
+           overflow-hidden hover:shadow-[0_0_30px_rgba(251,192,45,0.15)]
            hover:border-[#FBC02D] transition-all duration-300;
   }
 
-  /* Input — dark purple bg, mid-purple border, gold focus */
+  /* Input — semi-transparent dark bg */
   .input {
-    @apply w-full border border-[#4A3060] bg-[#241040] rounded-none px-4 py-2.5
+    @apply w-full border border-[#4A3060] bg-[#1A0A2E]/70 backdrop-blur-sm rounded-none px-4 py-2.5
            focus:outline-none focus:ring-1 focus:ring-[#FBC02D] focus:border-[#FBC02D]
            transition text-[#FBC02D] placeholder:text-[#FBC02D]/40;
   }

@@ -13,14 +13,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-[#1A0A2E] text-[#FBC02D] antialiased">
+      <body className="min-h-screen text-[#FBC02D] antialiased">
         <AuthProvider>
           <Navbar />
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             {children}
           </main>
-          <footer className="border-t border-gray-200 mt-16 py-8 text-center text-sm text-gray-500">
-            © {new Date().getFullYear()} Luxy Haven. Crafted with love for fashion.
+          <footer className="border-t border-[#4A3060] mt-16 py-8 text-center text-xs tracking-widest uppercase text-[#FBC02D]/40">
+            © {new Date().getFullYear()} Luxy Haven — Crafted with love for fashion.
           </footer>
         </AuthProvider>
       </body>
