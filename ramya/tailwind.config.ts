@@ -13,12 +13,12 @@ const config: Config = {
         foreground: "var(--foreground)",
         blush:      "#FF9D9D",   // coral rose  — accents, hearts, errors
         peach:      "#FFC5AA",   // soft peach  — hover states, warm accents
-        lime:       "#EEF8CD",   // pale lime   — light backgrounds, borders
+        lime:       "#4A3060",   // mid purple  — borders, dividers
         mint:       "#BBF1D2",   // mint green  — success, confirmed, delivered
-        gold:       "#C17F6E",   // muted terra — prices, dividers, icons
-        cream:      "#FFF5EE",   // off-white   — card bg, surfaces
-        royal:      "#3D2C2C",   // deep mocha  — primary text, headings
-        "deep-navy":"#2A1F1F",   // darker mocha— button hover
+        gold:       "#FBC02D",   // golden text — prices, icons, dividers
+        cream:      "#FBC02D",   // golden text — labels, text (alias)
+        royal:      "#1A0A2E",   // deep purple — primary bg, buttons
+        "deep-navy":"#120720",   // darker purple — button hover
         sage:       "#BBF1D2",   // alias → mint (orders delivered)
         steel:      "#FFC5AA",   // alias → peach (orders shipped)
       },

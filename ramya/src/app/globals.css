@@ -8,24 +8,24 @@
   :root {
     --color-blush:     #FF9D9D;
     --color-peach:     #FFC5AA;
-    --color-lime:      #EEF8CD;
+    --color-lime:      #4A3060;
     --color-mint:      #BBF1D2;
-    --color-gold:      #C17F6E;
-    --color-cream:     #FFF5EE;
-    --color-royal:     #3D2C2C;
-    --color-deep-navy: #2A1F1F;
-    --background: #FFF5EE;
-    --foreground: #3D2C2C;
+    --color-gold:      #FBC02D;
+    --color-cream:     #FBC02D;
+    --color-royal:     #1A0A2E;
+    --color-deep-navy: #120720;
+    --background: #1A0A2E;
+    --foreground: #FBC02D;
   }
 
   html {
-    background-color: #FFFAF7;
+    background-color: #1A0A2E;
   }
 
   body {
     font-family: 'Jost', system-ui, sans-serif;
-    color: #3D2C2C;
-    background-color: #FFFAF7;
+    color: #FBC02D;
+    background-color: #1A0A2E;
   }
 
   h1, h2, h3, h4 {
@@ -35,34 +35,34 @@
 }
 
 @layer components {
-  /* Primary button — deep mocha bg, cream text */
+  /* Primary button — gold text on deep purple */
   .btn-primary {
-    @apply bg-royal text-cream px-6 py-2.5 rounded-none font-medium tracking-widest uppercase text-xs
-           hover:bg-deep-navy transition-colors disabled:opacity-50 disabled:cursor-not-allowed
-           border border-royal hover:border-deep-navy;
+    @apply bg-[#FBC02D] text-[#1A0A2E] px-6 py-2.5 rounded-none font-medium tracking-widest uppercase text-xs
+           hover:bg-[#F9A825] transition-colors disabled:opacity-50 disabled:cursor-not-allowed
+           border border-[#FBC02D] hover:border-[#F9A825];
   }
 
   /* Secondary button — gold border, gold text */
   .btn-secondary {
-    @apply border border-gold text-gold px-6 py-2.5 rounded-none font-medium tracking-widest uppercase text-xs
-           hover:bg-gold hover:text-cream transition-colors;
+    @apply border border-[#FBC02D] text-[#FBC02D] px-6 py-2.5 rounded-none font-medium tracking-widest uppercase text-xs
+           hover:bg-[#FBC02D] hover:text-[#1A0A2E] transition-colors;
   }
 
-  /* Card — cream surface, lime border, hover blush border */
+  /* Card — dark purple surface, mid-purple border */
   .card {
-    @apply bg-cream rounded-none border border-lime overflow-hidden hover:shadow-md
-           hover:border-peach transition-all duration-300;
+    @apply bg-[#241040] rounded-none border border-[#4A3060] overflow-hidden hover:shadow-lg
+           hover:border-[#FBC02D] transition-all duration-300;
   }
 
-  /* Input — cream bg, lime border, gold focus */
+  /* Input — dark purple bg, mid-purple border, gold focus */
   .input {
-    @apply w-full border border-lime bg-white rounded-none px-4 py-2.5
-           focus:outline-none focus:ring-1 focus:ring-gold focus:border-gold
-           transition text-royal placeholder:text-royal/40;
+    @apply w-full border border-[#4A3060] bg-[#241040] rounded-none px-4 py-2.5
+           focus:outline-none focus:ring-1 focus:ring-[#FBC02D] focus:border-[#FBC02D]
+           transition text-[#FBC02D] placeholder:text-[#FBC02D]/40;
   }
 
   .label {
-    @apply block text-xs font-medium tracking-widest uppercase text-royal/70 mb-1;
+    @apply block text-xs font-medium tracking-widest uppercase text-[#FBC02D]/70 mb-1;
   }
 
   .badge {

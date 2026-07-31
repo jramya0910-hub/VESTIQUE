@@ -82,7 +82,7 @@ export default function OrdersPage() {
               </div>
 
               {expanded.has(order.id) && order.order_items && (
-                <div className="border-t border-lime px-5 py-4 bg-[#FFFAF7]">
+                <div className="border-t border-[#4A3060] px-5 py-4 bg-[#120720]">
                   <table className="w-full text-xs">
                     <thead>
                       <tr className="text-left text-[10px] tracking-widest uppercase text-royal/40">
