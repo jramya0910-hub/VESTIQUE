@@ -9,7 +9,9 @@ export const supabase = supabaseUrl
 
 /** Fetch wrapper that automatically attaches the Supabase Bearer token */
 export async function authedFetch(input: string, init: RequestInit = {}): Promise<Response> {
-  const { data: { session } } = await supabase.auth.getSession()
+  const session = supabase
+    ? (await supabase.auth.getSession()).data.session
+    : null
   return fetch(input, {
     ...init,
     headers: {
