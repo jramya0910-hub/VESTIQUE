@@ -2,30 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap');
+
 @layer base {
   :root {
-    --color-brand: #7c3aed;
-    --color-brand-light: #ede9fe;
+    --color-blush:     #FFB6A6;
+    --color-cream:     #FFEBD3;
+    --color-sage:      #9BCEC1;
+    --color-steel:     #67A2C5;
+    --color-gold:      #C8996A;
+    --color-royal:     #2C1A4A;
+    --color-deep-navy: #1A2340;
+    --background: #FFEBD3;
+    --foreground: #2C1A4A;
+  }
+
+  html {
+    background-color: #FEFAF5;
+  }
+
+  body {
+    font-family: 'Jost', system-ui, sans-serif;
+    color: #2C1A4A;
+    background-color: #FEFAF5;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    letter-spacing: 0.02em;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-violet-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-violet-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-royal text-cream px-6 py-2.5 rounded-none font-medium tracking-widest uppercase text-xs
+           hover:bg-deep-navy transition-colors disabled:opacity-50 disabled:cursor-not-allowed
+           border border-royal hover:border-deep-navy;
   }
   .btn-secondary {
-    @apply border border-gray-300 text-gray-700 px-5 py-2.5 rounded-lg font-medium hover:bg-gray-50 transition-colors;
+    @apply border border-gold text-gold px-6 py-2.5 rounded-none font-medium tracking-widest uppercase text-xs
+           hover:bg-gold hover:text-cream transition-colors;
   }
   .card {
-    @apply bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow;
+    @apply bg-white rounded-none border border-cream overflow-hidden hover:shadow-lg
+           hover:border-blush transition-all duration-300;
   }
   .input {
-    @apply w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent transition;
+    @apply w-full border border-cream bg-white rounded-none px-4 py-2.5
+           focus:outline-none focus:ring-1 focus:ring-gold focus:border-gold
+           transition text-royal placeholder:text-royal/40;
   }
   .label {
-    @apply block text-sm font-medium text-gray-700 mb-1;
+    @apply block text-xs font-medium tracking-widest uppercase text-royal/70 mb-1;
   }
   .badge {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    @apply inline-flex items-center px-3 py-0.5 rounded-none text-xs font-medium tracking-widest uppercase;
+  }
+
+  /* Luxury divider */
+  .divider-gold {
+    @apply border-t border-gold/30 my-6;
+  }
+
+  /* Section heading */
+  .heading-royal {
+    @apply font-serif text-3xl md:text-4xl text-royal tracking-wide;
   }
 }

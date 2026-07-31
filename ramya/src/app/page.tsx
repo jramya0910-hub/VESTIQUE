@@ -36,16 +36,13 @@ export default function HomePage() {
     const data: Product[] = await res.json()
     let list = Array.isArray(data) ? data : []
 
-    // Client-side price filter
     if (minPrice) list = list.filter(p => p.price >= Number(minPrice))
     if (maxPrice) list = list.filter(p => p.price <= Number(maxPrice))
 
-    // Sort
     list = [...list].sort((a, b) => {
       if (sort === 'price_asc') return a.price - b.price
       if (sort === 'price_desc') return b.price - a.price
       if (sort === 'name_asc') return a.name.localeCompare(b.name)
-      // newest: newest first (default API order)
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     })
 
@@ -85,31 +82,38 @@ export default function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <div className="bg-violet-50 rounded-2xl p-8 md:p-12 mb-10 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold text-violet-800 mb-3">
-          Fashion that tells your story
+      <div className="relative bg-royal rounded-none p-10 md:p-16 mb-12 text-center overflow-hidden">
+        {/* decorative blush glow */}
+        <div className="absolute -top-10 -right-10 w-64 h-64 rounded-full bg-blush/20 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-10 -left-10 w-64 h-64 rounded-full bg-steel/20 blur-3xl pointer-events-none" />
+
+        <p className="text-[10px] tracking-[0.35em] uppercase text-gold mb-4 font-light">
+          — Curated Luxury —
+        </p>
+        <h1 className="font-serif text-4xl md:text-6xl text-cream mb-4 leading-tight">
+          Fashion that tells<br />your story
         </h1>
-        <p className="text-gray-600 text-lg max-w-xl mx-auto">
-          Discover curated designs from independent designers.
+        <div className="w-16 h-px bg-gold mx-auto mb-4" />
+        <p className="text-cream/60 text-sm max-w-md mx-auto tracking-wide font-light">
+          Discover exquisite designs from independent designers, crafted for the discerning few.
         </p>
       </div>
 
       {/* Search + Filter bar */}
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <div className="relative flex-1">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gold" />
           <input
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search dresses, sarees, kurtis…"
+            placeholder="Search sarees, lehengas, gowns…"
             className="input pl-9"
           />
         </div>
         <div className="flex gap-2">
-          {/* Sort */}
           <div className="relative">
-            <SlidersHorizontal size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <SlidersHorizontal size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gold" />
             <select
               value={sort}
               onChange={e => setSort(e.target.value)}
@@ -120,19 +124,18 @@ export default function HomePage() {
               ))}
             </select>
           </div>
-          {/* Filter toggle */}
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-lg border text-sm font-medium transition-colors ${
+            className={`flex items-center gap-1.5 px-4 py-2 border text-xs font-medium tracking-widest uppercase transition-colors ${
               showFilters || (minPrice || maxPrice)
-                ? 'bg-violet-600 text-white border-violet-600'
-                : 'bg-white text-gray-600 border-gray-200 hover:border-violet-300'
+                ? 'bg-royal text-cream border-royal'
+                : 'bg-white text-royal border-cream hover:border-gold'
             }`}
           >
-            <SlidersHorizontal size={14} />
+            <SlidersHorizontal size={13} />
             Filter
             {(minPrice || maxPrice) && (
-              <span className="w-2 h-2 bg-white rounded-full" />
+              <span className="w-1.5 h-1.5 bg-gold rounded-full" />
             )}
           </button>
         </div>
@@ -140,33 +143,21 @@ export default function HomePage() {
 
       {/* Expandable price filter */}
       {showFilters && (
-        <div className="bg-violet-50 border border-violet-100 rounded-xl p-4 mb-4 flex flex-wrap gap-4 items-end">
+        <div className="bg-cream/40 border border-cream rounded-none p-4 mb-4 flex flex-wrap gap-4 items-end">
           <div>
-            <label className="label text-xs">Min Price (₹)</label>
-            <input
-              type="number"
-              value={minPrice}
-              onChange={e => setMinPrice(e.target.value)}
-              placeholder="0"
-              className="input mt-1 w-32"
-            />
+            <label className="label">Min Price (₹)</label>
+            <input type="number" value={minPrice} onChange={e => setMinPrice(e.target.value)} placeholder="0" className="input mt-1 w-32" />
           </div>
           <div>
-            <label className="label text-xs">Max Price (₹)</label>
-            <input
-              type="number"
-              value={maxPrice}
-              onChange={e => setMaxPrice(e.target.value)}
-              placeholder="Any"
-              className="input mt-1 w-32"
-            />
+            <label className="label">Max Price (₹)</label>
+            <input type="number" value={maxPrice} onChange={e => setMaxPrice(e.target.value)} placeholder="Any" className="input mt-1 w-32" />
           </div>
           {(minPrice || maxPrice) && (
             <button
               onClick={() => { setMinPrice(''); setMaxPrice('') }}
-              className="flex items-center gap-1 text-sm text-red-500 hover:text-red-700 pb-2"
+              className="flex items-center gap-1 text-xs tracking-widest uppercase text-blush hover:text-royal pb-2 transition-colors"
             >
-              <X size={14} /> Clear price
+              <X size={12} /> Clear
             </button>
           )}
         </div>
@@ -176,27 +167,27 @@ export default function HomePage() {
       {hasActiveFilters && (
         <div className="flex flex-wrap gap-2 mb-4">
           {sort !== 'newest' && (
-            <span className="flex items-center gap-1 bg-violet-100 text-violet-700 text-xs font-medium px-3 py-1 rounded-full">
+            <span className="flex items-center gap-1 bg-cream text-royal text-[10px] font-medium tracking-widest uppercase px-3 py-1 border border-gold/30">
               {SORT_OPTIONS.find(o => o.value === sort)?.label}
-              <button onClick={() => setSort('newest')}><X size={10} /></button>
+              <button onClick={() => setSort('newest')}><X size={9} /></button>
             </span>
           )}
           {category !== 'All' && (
-            <span className="flex items-center gap-1 bg-violet-100 text-violet-700 text-xs font-medium px-3 py-1 rounded-full">
+            <span className="flex items-center gap-1 bg-cream text-royal text-[10px] font-medium tracking-widest uppercase px-3 py-1 border border-gold/30">
               {category}
-              <button onClick={() => setCategory('All')}><X size={10} /></button>
+              <button onClick={() => setCategory('All')}><X size={9} /></button>
             </span>
           )}
           {minPrice && (
-            <span className="flex items-center gap-1 bg-violet-100 text-violet-700 text-xs font-medium px-3 py-1 rounded-full">
+            <span className="flex items-center gap-1 bg-cream text-royal text-[10px] font-medium tracking-widest uppercase px-3 py-1 border border-gold/30">
               Min ₹{minPrice}
-              <button onClick={() => setMinPrice('')}><X size={10} /></button>
+              <button onClick={() => setMinPrice('')}><X size={9} /></button>
             </span>
           )}
           {maxPrice && (
-            <span className="flex items-center gap-1 bg-violet-100 text-violet-700 text-xs font-medium px-3 py-1 rounded-full">
+            <span className="flex items-center gap-1 bg-cream text-royal text-[10px] font-medium tracking-widest uppercase px-3 py-1 border border-gold/30">
               Max ₹{maxPrice}
-              <button onClick={() => setMaxPrice('')}><X size={10} /></button>
+              <button onClick={() => setMaxPrice('')}><X size={9} /></button>
             </span>
           )}
         </div>
@@ -208,10 +199,10 @@ export default function HomePage() {
           <button
             key={c}
             onClick={() => setCategory(c)}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors ${
+            className={`px-4 py-1.5 text-xs font-medium tracking-widest uppercase border transition-colors ${
               category === c
-                ? 'bg-violet-600 text-white border-violet-600'
-                : 'bg-white text-gray-600 border-gray-200 hover:border-violet-300'
+                ? 'bg-royal text-cream border-royal'
+                : 'bg-white text-royal/60 border-cream hover:border-gold hover:text-gold'
             }`}
           >
             {c}
@@ -221,8 +212,8 @@ export default function HomePage() {
 
       {/* Results count */}
       {!loading && (
-        <p className="text-sm text-gray-500 mb-4">
-          {products.length} product{products.length !== 1 ? 's' : ''} found
+        <p className="text-xs tracking-widest uppercase text-royal/40 mb-4">
+          {products.length} piece{products.length !== 1 ? 's' : ''} found
         </p>
       )}
 
@@ -230,17 +221,17 @@ export default function HomePage() {
       {loading ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="rounded-xl bg-gray-100 animate-pulse aspect-[3/4]" />
+            <div key={i} className="bg-cream/50 animate-pulse aspect-[3/4]" />
           ))}
         </div>
       ) : products.length === 0 ? (
-        <div className="text-center py-20 text-gray-400">
-          <p className="text-xl font-medium">No products found</p>
-          <p className="text-sm mt-2">Try adjusting your search or filters</p>
+        <div className="text-center py-20 text-royal/40">
+          <p className="font-serif text-2xl mb-2">No pieces found</p>
+          <p className="text-xs tracking-widest uppercase mt-2">Try adjusting your search or filters</p>
           {hasActiveFilters && (
             <button
               onClick={() => { setCategory('All'); setSort('newest'); setMinPrice(''); setMaxPrice('') }}
-              className="btn-primary mt-4 text-sm"
+              className="btn-primary mt-6 text-xs"
             >
               Clear all filters
             </button>

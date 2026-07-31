@@ -11,93 +11,101 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <nav className="sticky top-0 z-50 bg-white border-b border-gray-200">
+    <nav className="sticky top-0 z-50 bg-[#FEFAF5] border-b border-cream">
+      {/* Top luxury bar */}
+      <div className="bg-royal text-cream text-center text-[10px] tracking-[0.25em] uppercase py-1.5 font-light">
+        Free shipping on orders above ₹2,999
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Brand */}
-          <Link href="/" className="flex items-center gap-2">
-            <Image src="/logo.jpeg" alt="Luxy Haven" width={36} height={36} className="rounded-full object-cover" />
-            <span className="text-2xl font-bold text-violet-600 tracking-tight">Luxy Haven</span>
+          <Link href="/" className="flex items-center gap-3">
+            <Image src="/logo.jpeg" alt="Luxy Haven" width={38} height={38} className="rounded-full object-cover ring-2 ring-gold/40" />
+            <div className="flex flex-col leading-none">
+              <span className="font-serif text-2xl tracking-widest text-royal">LUXY HAVEN</span>
+              <span className="text-[9px] tracking-[0.3em] uppercase text-gold font-light">Luxury Fashion</span>
+            </div>
           </Link>
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-6">
-            <Link href="/" className="text-sm text-gray-600 hover:text-violet-600 transition-colors">
-              Catalog
+            <Link href="/" className="text-xs tracking-widest uppercase text-royal/70 hover:text-gold transition-colors">
+              Catalogue
             </Link>
             {user && (
               <>
-                <Link href="/wishlist" className="flex items-center gap-1 text-sm text-gray-600 hover:text-violet-600 transition-colors">
-                  <Heart size={16} /> Wishlist
+                <Link href="/wishlist" className="flex items-center gap-1.5 text-xs tracking-widest uppercase text-royal/70 hover:text-gold transition-colors">
+                  <Heart size={14} /> Wishlist
                 </Link>
-                <Link href="/cart" className="flex items-center gap-1 text-sm text-gray-600 hover:text-violet-600 transition-colors">
-                  <ShoppingBag size={16} /> Cart
+                <Link href="/cart" className="flex items-center gap-1.5 text-xs tracking-widest uppercase text-royal/70 hover:text-gold transition-colors">
+                  <ShoppingBag size={14} /> Cart
                 </Link>
-                <Link href="/orders" className="flex items-center gap-1 text-sm text-gray-600 hover:text-violet-600 transition-colors">
-                  <Package size={16} /> Orders
+                <Link href="/orders" className="flex items-center gap-1.5 text-xs tracking-widest uppercase text-royal/70 hover:text-gold transition-colors">
+                  <Package size={14} /> Orders
                 </Link>
                 {profile?.role === 'designer' && (
                   <>
-                    <Link href="/designer/dashboard" className="flex items-center gap-1 text-sm text-gray-600 hover:text-violet-600 transition-colors">
-                      <LayoutDashboard size={16} /> Dashboard
+                    <Link href="/designer/dashboard" className="flex items-center gap-1.5 text-xs tracking-widest uppercase text-royal/70 hover:text-gold transition-colors">
+                      <LayoutDashboard size={14} /> Dashboard
                     </Link>
-                    <Link href="/designer/upload" className="flex items-center gap-1 text-sm text-gray-600 hover:text-violet-600 transition-colors">
-                      <Upload size={16} /> Upload
+                    <Link href="/designer/upload" className="flex items-center gap-1.5 text-xs tracking-widest uppercase text-royal/70 hover:text-gold transition-colors">
+                      <Upload size={14} /> Upload
                     </Link>
                   </>
                 )}
-                <Link href="/profile" className="flex items-center gap-1 text-sm text-gray-600 hover:text-violet-600 transition-colors">
-                  <User size={16} /> {profile?.full_name?.split(' ')[0] ?? 'Profile'}
+                <Link href="/profile" className="flex items-center gap-1.5 text-xs tracking-widest uppercase text-royal/70 hover:text-gold transition-colors">
+                  <User size={14} /> {profile?.full_name?.split(' ')[0] ?? 'Profile'}
                 </Link>
                 <button
                   onClick={signOut}
-                  className="flex items-center gap-1 text-sm text-gray-600 hover:text-red-500 transition-colors"
+                  className="flex items-center gap-1.5 text-xs tracking-widest uppercase text-royal/70 hover:text-blush transition-colors"
                 >
-                  <LogOut size={16} /> Sign out
+                  <LogOut size={14} /> Sign out
                 </button>
               </>
             )}
             {!user && (
-              <Link href="/login" className="btn-primary text-sm">
-                <span className="flex items-center gap-1"><LogIn size={16} /> Sign in</span>
+              <Link href="/login" className="btn-primary text-xs">
+                <span className="flex items-center gap-1.5"><LogIn size={13} /> Sign in</span>
               </Link>
             )}
           </div>
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden p-2 text-gray-600"
+            className="md:hidden p-2 text-royal"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
           >
-            <span className="block w-5 h-0.5 bg-current mb-1" />
-            <span className="block w-5 h-0.5 bg-current mb-1" />
-            <span className="block w-5 h-0.5 bg-current" />
+            <span className="block w-5 h-px bg-current mb-1.5" />
+            <span className="block w-5 h-px bg-current mb-1.5" />
+            <span className="block w-5 h-px bg-current" />
           </button>
         </div>
       </div>
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden border-t border-gray-100 bg-white px-4 py-4 flex flex-col gap-3">
-          <Link href="/" onClick={() => setMenuOpen(false)} className="text-sm text-gray-700">Catalog</Link>
+        <div className="md:hidden border-t border-cream bg-[#FEFAF5] px-6 py-5 flex flex-col gap-4">
+          <Link href="/" onClick={() => setMenuOpen(false)} className="text-xs tracking-widest uppercase text-royal/70">Catalogue</Link>
           {user && (
             <>
-              <Link href="/wishlist" onClick={() => setMenuOpen(false)} className="text-sm text-gray-700">Wishlist</Link>
-              <Link href="/cart" onClick={() => setMenuOpen(false)} className="text-sm text-gray-700">Cart</Link>
-              <Link href="/orders" onClick={() => setMenuOpen(false)} className="text-sm text-gray-700">Orders</Link>
-              <Link href="/profile" onClick={() => setMenuOpen(false)} className="text-sm text-gray-700">My Profile</Link>
+              <Link href="/wishlist" onClick={() => setMenuOpen(false)} className="text-xs tracking-widest uppercase text-royal/70">Wishlist</Link>
+              <Link href="/cart" onClick={() => setMenuOpen(false)} className="text-xs tracking-widest uppercase text-royal/70">Cart</Link>
+              <Link href="/orders" onClick={() => setMenuOpen(false)} className="text-xs tracking-widest uppercase text-royal/70">Orders</Link>
+              <Link href="/profile" onClick={() => setMenuOpen(false)} className="text-xs tracking-widest uppercase text-royal/70">My Profile</Link>
               {profile?.role === 'designer' && (
                 <>
-                  <Link href="/designer/dashboard" onClick={() => setMenuOpen(false)} className="text-sm text-gray-700">Dashboard</Link>
-                  <Link href="/designer/upload" onClick={() => setMenuOpen(false)} className="text-sm text-gray-700">Upload Product</Link>
+                  <Link href="/designer/dashboard" onClick={() => setMenuOpen(false)} className="text-xs tracking-widest uppercase text-royal/70">Dashboard</Link>
+                  <Link href="/designer/upload" onClick={() => setMenuOpen(false)} className="text-xs tracking-widest uppercase text-royal/70">Upload Product</Link>
                 </>
               )}
-              <button onClick={() => { signOut(); setMenuOpen(false) }} className="text-sm text-red-500 text-left">Sign out</button>
+              <button onClick={() => { signOut(); setMenuOpen(false) }} className="text-xs tracking-widest uppercase text-blush text-left">Sign out</button>
             </>
           )}
           {!user && (
-            <Link href="/login" onClick={() => setMenuOpen(false)} className="btn-primary text-sm w-fit">Sign in</Link>
+            <Link href="/login" onClick={() => setMenuOpen(false)} className="btn-primary text-xs w-fit">Sign in</Link>
           )}
         </div>
       )}
