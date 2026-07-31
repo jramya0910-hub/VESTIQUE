@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { Heart, ShoppingBag, ArrowLeft, Share2, Star, StarOff, Send } from 'lucide-react'
+import { Heart, ShoppingBag, ArrowLeft, Share2, Star, StarOff, Send, Camera } from 'lucide-react'
 import { supabase, Product } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth-context'
 import ProductCard from '@/components/ProductCard'
+import TryOnModal from '@/components/TryOnModal'
 
 type Review = {
   id: string
@@ -50,6 +51,7 @@ export default function ProductDetailPage() {
   const [cartLoading, setCartLoading] = useState(false)
   const [wishLoading, setWishLoading] = useState(false)
   const [toast, setToast] = useState('')
+  const [showTryOn, setShowTryOn] = useState(false)
 
   function showToast(msg: string) {
     setToast(msg)
@@ -228,6 +230,9 @@ export default function ProductDetailPage() {
 
   return (
     <div>
+      {/* TryOn Modal */}
+      {showTryOn && <TryOnModal product={product} onClose={() => setShowTryOn(false)} />}
+
       {/* Toast */}
       {toast && (
         <div className="fixed top-20 right-4 z-50 bg-gray-900 text-white px-5 py-3 rounded-xl text-sm shadow-lg transition-all">
@@ -296,6 +301,14 @@ export default function ProductDetailPage() {
               title="Share product"
             >
               <Share2 size={18} />
+            </button>
+
+            <button
+              onClick={() => setShowTryOn(true)}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-violet-200 text-violet-600 hover:bg-violet-50 transition-colors"
+              title="Virtual Try-On"
+            >
+              <Camera size={18} />
             </button>
           </div>
 
