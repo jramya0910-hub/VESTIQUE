@@ -204,6 +204,7 @@ const UI = {
       { icon: '🎁', label: 'Gift Registry',         desc: 'Share your wish list',            action: "ROUTER.navigate('registry')" },
       { icon: '🎟️', label: 'Coupon Wallet',        desc: 'View & apply coupons',            action: "ROUTER.navigate('coupon-wallet')" },
       { icon: '📏', label: 'Size Recommender',     desc: 'Find your perfect fit',           action: "ROUTER.navigate('size-recommender')" },
+      { icon: '💍', label: 'Wedding Milestones',   desc: 'Track your wedding checklist',    action: "ROUTER.navigate('milestones')" },
       { icon: '📸', label: 'Share Your Look',      desc: 'Post your bridal photo',          action: "ROUTER.navigate('community-upload')" },
       { icon: '👑', label: 'Community Gallery',    desc: 'Inspiration from real brides',    action: "ROUTER.navigate('community')" },
       { icon: '💬', label: 'Chat with Vee',        desc: 'AI bridal assistant',             action: "CHATBOT.toggle()" },

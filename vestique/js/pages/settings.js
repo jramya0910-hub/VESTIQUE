@@ -66,20 +66,24 @@ const SETTINGS = {
             { key: 'notif_price',    icon: '💰', label: 'Price Drops' },
             { key: 'notif_festival', icon: '🎉', label: 'Festival Collections' },
             { key: 'notif_designer', icon: '👗', label: 'Designer Uploads' },
-          ].map(n => `
+          ].map(n => {
+            const prefs = STATE.notifPrefs || {};
+            const isOn = prefs[n.key] !== false;
+            return `
             <div class="settings-item">
               <div class="settings-icon">${n.icon}</div>
               <div class="settings-label">${n.label}</div>
               <div style="margin-left:auto">
                 <div onclick="SETTINGS.toggleNotif('${n.key}', this)" style="
                   width:44px;height:24px;border-radius:12px;
-                  background:var(--gold);position:relative;transition:background 0.3s;cursor:pointer;
+                  background:${isOn ? 'var(--gold)' : 'var(--border)'};
+                  position:relative;transition:background 0.3s;cursor:pointer;
                 " class="notif-toggle" data-key="${n.key}">
-                  <div style="position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:white;transition:all 0.3s;"></div>
+                  <div style="position:absolute;top:3px;${isOn ? 'right:3px' : 'left:3px'};width:18px;height:18px;border-radius:50%;background:white;transition:all 0.3s;"></div>
                 </div>
               </div>
             </div>
-          `).join('')}
+          `}).join('')}
 
           <!-- Privacy & Support -->
           <div class="settings-section-title">Privacy & Support</div>
@@ -126,7 +130,16 @@ const SETTINGS = {
   },
 
   toggleNotif(key, el) {
-    UI.toast('Notification preference saved ✓', 'success');
+    if (!STATE.notifPrefs) STATE.notifPrefs = {};
+    const current = STATE.notifPrefs[key] !== false; // default ON
+    STATE.notifPrefs[key] = !current;
+    STORE.save();
+    // Update toggle visual
+    const isOn = STATE.notifPrefs[key];
+    el.style.background = isOn ? 'var(--gold)' : 'var(--border)';
+    const knob = el.querySelector('div');
+    if (knob) { knob.style.right = isOn ? '3px' : ''; knob.style.left = isOn ? '' : '3px'; }
+    UI.toast(isOn ? 'Notifications enabled ✓' : 'Notifications disabled', isOn ? 'success' : 'info');
   },
 
   showLanguageModal() {

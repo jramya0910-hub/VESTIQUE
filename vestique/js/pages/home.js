@@ -203,7 +203,7 @@ const HOME = {
               { icon: '📖', label: 'Lookbooks',     action: "ROUTER.navigate('lookbook')",         color: 'var(--blush)' },
               { icon: '📅', label: 'Appointments',  action: "ROUTER.navigate('appointments')",     color: 'var(--rose-gold-light)' },
               { icon: '🎁', label: 'Gift Registry', action: "ROUTER.navigate('registry')",         color: 'var(--gold-light)' },
-              { icon: '📏', label: 'Size Finder',   action: "ROUTER.navigate('size-recommender')", color: 'var(--blush)' },
+              { icon: '💍', label: 'Milestones',    action: "ROUTER.navigate('milestones')",       color: 'var(--blush)' },
               { icon: '💬', label: 'Ask Vee',       action: "CHATBOT.toggle()",                    color: 'var(--rose-gold-light)' },
             ].map(f => `
               <div class="card" style="padding:var(--space-md) var(--space-sm);cursor:pointer;background:${f.color};border:none;text-align:center"

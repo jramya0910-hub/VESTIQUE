@@ -120,7 +120,7 @@ const PROFILE = {
               { icon: '📅', label: 'Appointments',   action: "ROUTER.navigate('appointments')" },
               { icon: '🎁', label: 'Gift Registry',  action: "ROUTER.navigate('registry')" },
               { icon: '🎟️', label: 'Coupons',        action: "ROUTER.navigate('coupon-wallet')" },
-              { icon: '📏', label: 'Size Finder',    action: "ROUTER.navigate('size-recommender')" },
+              { icon: '💍', label: 'Milestones',     action: "ROUTER.navigate('milestones')" },
             ].map(t => `
               <div class="settings-item" onclick="${t.action}" style="border:1px solid var(--border);border-radius:var(--radius-md);margin:0;padding:12px">
                 <div class="settings-icon">${t.icon}</div>

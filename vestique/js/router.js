@@ -38,6 +38,8 @@ const ROUTER = {
     'coupon-wallet':     () => COUPON_WALLET.render(),
     'size-recommender':  () => SIZE_RECOMMENDER.render(),
     'community-upload':  () => COMMUNITY_UPLOAD.render(),
+    // New pages - Round 3
+    'milestones':        () => MILESTONES.render(),
   },
 
   navigate(page, params = {}, addHistory = true) {
