@@ -160,8 +160,9 @@ insert into coupons (code, discount_type, discount_value, min_order) values
 on conflict do nothing;
 
 -- ── Storage: product-images bucket ─────────────────────────
--- Run these after creating the bucket in the dashboard or via API:
--- insert into storage.buckets (id, name, public) values ('product-images', 'product-images', true);
+insert into storage.buckets (id, name, public)
+values ('product-images', 'product-images', true)
+on conflict (id) do update set public = true;
 
 create policy "Public read product images"
   on storage.objects for select

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 import { Upload, ImageIcon } from 'lucide-react'
 import { useAuth } from '@/lib/auth-context'
 import { supabase } from '@/lib/supabase'
@@ -44,13 +43,23 @@ export default function DesignerUploadPage() {
     let image_url: string | null = null
 
     if (imageFile) {
-      // Convert to base64 data URL — works regardless of storage bucket settings
-      image_url = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader()
-        reader.onload = () => resolve(reader.result as string)
-        reader.onerror = () => reject(new Error('Failed to read file'))
-        reader.readAsDataURL(imageFile)
-      })
+      const ext = imageFile.name.split('.').pop()
+      const path = `${user!.id}/${Date.now()}.${ext}`
+
+      // Upload directly from browser to Supabase Storage
+      const { error: uploadError } = await supabase.storage
+        .from('product-images')
+        .upload(path, imageFile, { cacheControl: '3600', upsert: true })
+
+      if (uploadError) {
+        setError(`Image upload failed: ${uploadError.message}`)
+        setSubmitting(false)
+        return
+      }
+
+      // Build the public URL manually — always works once bucket is public
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+      image_url = `${supabaseUrl}/storage/v1/object/public/product-images/${path}`
     }
 
     const { data: { session } } = await supabase.auth.getSession()
@@ -123,7 +132,8 @@ export default function DesignerUploadPage() {
             />
             {imagePreview ? (
               <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden border-2 border-dashed border-violet-300">
-                <Image src={imagePreview} alt="Preview" fill className="object-cover" />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={imagePreview} alt="Preview" className="object-cover w-full h-full" />
                 <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                   <p className="text-white text-sm font-medium">Click to change</p>
                 </div>
