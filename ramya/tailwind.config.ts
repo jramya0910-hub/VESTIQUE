@@ -17,7 +17,7 @@ const config: Config = {
         "maroon-mid":"#5C1010",  // mid maroon   — borders, dividers
         "maroon-rich":"#8B1A1A", // rich maroon  — hover borders, accents
         blush:      "#C0392B",   // crimson      — hearts, error accents
-        royal:      "#3B0A0A",   // alias maroon — used in existing classes
+        royal:      "#063B00",   // dark forest green — visible on dark bg
         "deep-navy":"#280606",   // darkest       — button hover, deepest bg
         cream:      "#F5E6D0",   // alias ivory  — used in existing classes
         sage:       "#A8D8A8",   // soft green   — delivered badge
