@@ -11,13 +11,16 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        blush:   "#FFB6A6",
-        cream:   "#FFEBD3",
-        sage:    "#9BCEC1",
-        steel:   "#67A2C5",
-        gold:    "#C8996A",
-        "deep-navy": "#1A2340",
-        "royal":     "#2C1A4A",
+        blush:      "#FF9D9D",   // coral rose  — accents, hearts, errors
+        peach:      "#FFC5AA",   // soft peach  — hover states, warm accents
+        lime:       "#EEF8CD",   // pale lime   — light backgrounds, borders
+        mint:       "#BBF1D2",   // mint green  — success, confirmed, delivered
+        gold:       "#C17F6E",   // muted terra — prices, dividers, icons
+        cream:      "#FFF5EE",   // off-white   — card bg, surfaces
+        royal:      "#3D2C2C",   // deep mocha  — primary text, headings
+        "deep-navy":"#2A1F1F",   // darker mocha— button hover
+        sage:       "#BBF1D2",   // alias → mint (orders delivered)
+        steel:      "#FFC5AA",   // alias → peach (orders shipped)
       },
       fontFamily: {
         serif: ["Georgia", "Cambria", "Times New Roman", "serif"],

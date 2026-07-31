@@ -6,25 +6,26 @@
 
 @layer base {
   :root {
-    --color-blush:     #FFB6A6;
-    --color-cream:     #FFEBD3;
-    --color-sage:      #9BCEC1;
-    --color-steel:     #67A2C5;
-    --color-gold:      #C8996A;
-    --color-royal:     #2C1A4A;
-    --color-deep-navy: #1A2340;
-    --background: #FFEBD3;
-    --foreground: #2C1A4A;
+    --color-blush:     #FF9D9D;
+    --color-peach:     #FFC5AA;
+    --color-lime:      #EEF8CD;
+    --color-mint:      #BBF1D2;
+    --color-gold:      #C17F6E;
+    --color-cream:     #FFF5EE;
+    --color-royal:     #3D2C2C;
+    --color-deep-navy: #2A1F1F;
+    --background: #FFF5EE;
+    --foreground: #3D2C2C;
   }
 
   html {
-    background-color: #FEFAF5;
+    background-color: #FFFAF7;
   }
 
   body {
     font-family: 'Jost', system-ui, sans-serif;
-    color: #2C1A4A;
-    background-color: #FEFAF5;
+    color: #3D2C2C;
+    background-color: #FFFAF7;
   }
 
   h1, h2, h3, h4 {
@@ -34,37 +35,44 @@
 }
 
 @layer components {
+  /* Primary button — deep mocha bg, cream text */
   .btn-primary {
     @apply bg-royal text-cream px-6 py-2.5 rounded-none font-medium tracking-widest uppercase text-xs
            hover:bg-deep-navy transition-colors disabled:opacity-50 disabled:cursor-not-allowed
            border border-royal hover:border-deep-navy;
   }
+
+  /* Secondary button — gold border, gold text */
   .btn-secondary {
     @apply border border-gold text-gold px-6 py-2.5 rounded-none font-medium tracking-widest uppercase text-xs
            hover:bg-gold hover:text-cream transition-colors;
   }
+
+  /* Card — cream surface, lime border, hover blush border */
   .card {
-    @apply bg-white rounded-none border border-cream overflow-hidden hover:shadow-lg
-           hover:border-blush transition-all duration-300;
+    @apply bg-cream rounded-none border border-lime overflow-hidden hover:shadow-md
+           hover:border-peach transition-all duration-300;
   }
+
+  /* Input — cream bg, lime border, gold focus */
   .input {
-    @apply w-full border border-cream bg-white rounded-none px-4 py-2.5
+    @apply w-full border border-lime bg-white rounded-none px-4 py-2.5
            focus:outline-none focus:ring-1 focus:ring-gold focus:border-gold
            transition text-royal placeholder:text-royal/40;
   }
+
   .label {
     @apply block text-xs font-medium tracking-widest uppercase text-royal/70 mb-1;
   }
+
   .badge {
     @apply inline-flex items-center px-3 py-0.5 rounded-none text-xs font-medium tracking-widest uppercase;
   }
 
-  /* Luxury divider */
   .divider-gold {
     @apply border-t border-gold/30 my-6;
   }
 
-  /* Section heading */
   .heading-royal {
     @apply font-serif text-3xl md:text-4xl text-royal tracking-wide;
   }

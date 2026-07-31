@@ -83,9 +83,9 @@ export default function HomePage() {
     <div>
       {/* Hero */}
       <div className="relative bg-royal rounded-none p-10 md:p-16 mb-12 text-center overflow-hidden">
-        {/* decorative blush glow */}
+        {/* decorative glows */}
         <div className="absolute -top-10 -right-10 w-64 h-64 rounded-full bg-blush/20 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-10 -left-10 w-64 h-64 rounded-full bg-steel/20 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-10 -left-10 w-64 h-64 rounded-full bg-mint/20 blur-3xl pointer-events-none" />
 
         <p className="text-[10px] tracking-[0.35em] uppercase text-gold mb-4 font-light">
           — Curated Luxury —

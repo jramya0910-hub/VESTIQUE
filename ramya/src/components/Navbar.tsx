@@ -11,7 +11,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#FEFAF5] border-b border-cream">
+    <nav className="sticky top-0 z-50 bg-[#FFFAF7] border-b border-lime">
       {/* Top luxury bar */}
       <div className="bg-royal text-cream text-center text-[10px] tracking-[0.25em] uppercase py-1.5 font-light">
         Free shipping on orders above ₹2,999
@@ -87,7 +87,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden border-t border-cream bg-[#FEFAF5] px-6 py-5 flex flex-col gap-4">
+        <div className="md:hidden border-t border-lime bg-[#FFFAF7] px-6 py-5 flex flex-col gap-4">
           <Link href="/" onClick={() => setMenuOpen(false)} className="text-xs tracking-widest uppercase text-royal/70">Catalogue</Link>
           {user && (
             <>
