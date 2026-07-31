@@ -56,8 +56,21 @@ export default function DesignerUploadPage() {
         return
       }
 
-      const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(path)
-      image_url = urlData.publicUrl
+      // Try public URL first; fall back to a long-lived signed URL (works for private buckets)
+      const { data: publicData } = supabase.storage.from('product-images').getPublicUrl(path)
+      if (publicData?.publicUrl && !publicData.publicUrl.endsWith('/')) {
+        image_url = publicData.publicUrl
+      } else {
+        const { data: signedData, error: signedError } = await supabase.storage
+          .from('product-images')
+          .createSignedUrl(path, 60 * 60 * 24 * 365) // 1 year
+        if (signedError || !signedData?.signedUrl) {
+          setError('Failed to get image URL after upload')
+          setSubmitting(false)
+          return
+        }
+        image_url = signedData.signedUrl
+      }
     }
 
     const { data: { session } } = await supabase.auth.getSession()
