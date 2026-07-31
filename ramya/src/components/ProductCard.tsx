@@ -36,7 +36,7 @@ export default function ProductCard({ product, wishlisted, onWishlist }: Product
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
             <Link href={`/product/${product.id}`}>
-              <p className="font-medium text-[#059669] truncate hover:text-gold transition-colors text-sm tracking-wide">
+              <p className="font-medium text-[#10B981] truncate hover:text-gold transition-colors text-sm tracking-wide">
                 {product.name}
               </p>
             </Link>
