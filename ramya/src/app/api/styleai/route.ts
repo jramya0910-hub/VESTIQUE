@@ -130,33 +130,27 @@ export async function POST(req: NextRequest) {
         ).join('\n')
       : '\n\n## Available Product Catalog\n\nNo products currently available.'
 
-    const apiKey = process.env.GEMINI_API_KEY
+    const apiKey = process.env.GROQ_API_KEY
     if (!apiKey) {
-      return NextResponse.json({ error: 'StyleAI is not configured. Please set GEMINI_API_KEY.' }, { status: 500 })
+      return NextResponse.json({ error: 'StyleAI is not configured. Please set GROQ_API_KEY.' }, { status: 500 })
     }
 
-    // Gemini expects conversation history without the system role —
-    // prepend system prompt as the first user turn instead.
-    const geminiMessages = [
-      { role: 'user', parts: [{ text: SYSTEM_PROMPT + catalogText + '\n\nUnderstood. I am StyleAI, ready to help.' }] },
-      { role: 'model', parts: [{ text: 'Understood. I am StyleAI, ready to help.' }] },
-      ...messages.map((m: { role: string; content: string }) => ({
-        role: m.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: m.content }],
-      })),
-    ]
-
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: geminiMessages,
-          generationConfig: { maxOutputTokens: 800, temperature: 0.7 },
-        }),
-      }
-    )
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT + catalogText },
+          ...messages,
+        ],
+        max_tokens: 800,
+        temperature: 0.7,
+      }),
+    })
 
     if (!response.ok) {
       const err = await response.json().catch(() => ({}))
@@ -164,7 +158,7 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await response.json()
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text ?? 'Sorry, I could not generate a response.'
+    const reply = data.choices?.[0]?.message?.content ?? 'Sorry, I could not generate a response.'
     return NextResponse.json({ reply })
   } catch (err) {
     console.error('StyleAI error:', err)
