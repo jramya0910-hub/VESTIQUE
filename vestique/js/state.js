@@ -28,6 +28,10 @@ const STATE = {
   registry: null,        // { name, date, message, dressIds }
   weddingDate: null,     // ISO string for countdown
   weddingMilestones: [], // [ { label, done, dueDate } ]
+  savedCoupons: [],      // [ couponCode, ... ]
+  communityPosts: [],    // [ { id, photoData, caption, ... } ]
+  returnRequests: [],    // [ { id, orderId, reason, ... } ]
+  notifPrefs: {},        // { notif_orders: bool, ... }
 
   // ── Search & Filter ───────────────────────────────────────
   searchQuery: '',
